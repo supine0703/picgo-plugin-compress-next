@@ -12,7 +12,7 @@ import { SkipCompress } from './compress/skip'
 const ALLOW_EXTNAME = ['.png', '.jpg', '.webp', '.jpeg']
 
 function handle(ctx: PicGo) {
-  const config: IConfig = ctx.getConfig('transformer.compress') || ctx.getConfig('picgo-plugin-compress')
+  const config: IConfig = ctx.getConfig('transformer.compress') || ctx.getConfig('picgo-plugin-compress-webp-lossless')
   const compress = config?.compress
   const key = config?.key || config?.tinypngKey
 
@@ -54,7 +54,7 @@ module.exports = function (ctx: PicGo): any {
       ctx.helper.transformer.register('compress', { handle })
     },
     config(ctx: PicGo): PluginConfig[] {
-      let config = ctx.getConfig('transformer.compress') || ctx.getConfig('picgo-plugin-compress')
+      let config = ctx.getConfig('transformer.compress') || ctx.getConfig('picgo-plugin-compress-webp-lossless')
       if (!config) {
         config = {}
       }

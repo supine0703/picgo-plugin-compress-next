@@ -1,13 +1,13 @@
 {
-  "name": "picgo-plugin-compress",
-  "version": "1.4.0",
-  "description": "Image compression plugin for PicGo",
+  "name": "picgo-plugin-compress-webp-lossless",
+  "version": "1.0.0",
+  "description": "Image compression plugin for PicGo. Encode images as webp losslessly",
   "main": "dist/index.js",
   "publishConfig": {
     "access": "public"
   },
-  "repository": "git@github.com:JuZiSang/picgo-plugin-compress.git",
-  "author": "juzisang <juziexe@gmail.com>",
+  "repository": "https://github.com/mrgeneralgoo/picgo-plugin-compress-webp-lossless.git",
+  "author": "mrgeneralgoo <mrgeneralgoo@gmail.com>",
   "license": "MIT",
   "files": [
     "/dist"

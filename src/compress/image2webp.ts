@@ -9,7 +9,7 @@ export function Image2WebPCompress(ctx: PicGo, { imageUrl }: CommonParams): Prom
   return getImageBuffer(ctx, imageUrl)
     .then((buffer) => {
       ctx.log.info('转换图片为WebP')
-      return imagemin.buffer(buffer, { plugins: [imageminWebp({ quality: 75 })] })
+      return imagemin.buffer(buffer, { plugins: [imageminWebp({ quality: 100, number: 6, lossless: true })] })
     })
     .then((buffer) => {
       ctx.log.info('Image2WebP 压缩成功')
