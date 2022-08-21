@@ -1,6 +1,6 @@
 {
   "name": "picgo-plugin-compress-webp-lossless",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Image compression plugin for PicGo. Encode images as webp losslessly",
   "main": "dist/index.js",
   "publishConfig": {
