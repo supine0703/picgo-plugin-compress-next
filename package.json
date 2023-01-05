@@ -1,6 +1,6 @@
 {
   "name": "picgo-plugin-compress-webp-lossless",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "description": "Image compression plugin for PicGo. Encode images as webp losslessly",
   "main": "dist/index.js",
   "publishConfig": {
@@ -37,13 +37,13 @@
     "typescript": "^3.8.3"
   },
   "dependencies": {
-    "crypto-js": "^4.0.0",
-    "fs-extra": "^9.0.0",
-    "image-size": "^0.8.3",
-    "imagemin": "^7.0.1",
-    "imagemin-mozjpeg": "^8.0.0",
-    "imagemin-upng": "^2.0.2",
-    "imagemin-webp": "^6.0.0",
+    "crypto-js": "^4.1.1",
+    "fs-extra": "^11.1.0",
+    "image-size": "^1.0.2",
+    "imagemin": "^8.0.1",
+    "imagemin-mozjpeg": "^10.0.0",
+    "imagemin-upng": "^4.0.0",
+    "imagemin-webp": "^7.0.0",
     "request": "^2.88.2"
   }
 }
