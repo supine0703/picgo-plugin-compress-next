@@ -1,15 +1,14 @@
 import * as path from 'path'
 import * as fs from 'fs-extra'
-import { getImageBuffer, isNetworkUrl } from '../../utils'
-import { TINYPNG_UPLOAD_URL } from '../../config'
 import Base64 from 'crypto-js/enc-base64'
 import Utf8 from 'crypto-js/enc-utf8'
-import PicGo from 'picgo'
-import { Response } from 'request'
+import { IPicGo } from 'picgo'
+import { getImageBuffer, isNetworkUrl } from '../../utils'
+import { TINYPNG_UPLOAD_URL } from '../../config'
 
 interface TinyPngOptions {
   keys: string[]
-  ctx: PicGo
+  ctx: IPicGo
 }
 
 interface TinyCacheConfig {
@@ -22,89 +21,83 @@ interface TinyCacheConfig {
 class TinyPng {
   private cacheConfigPath = path.join(__dirname, 'config.json')
   private options!: TinyPngOptions
-  private PicGo!: PicGo
+  private IPicGo!: IPicGo
 
+  // Initialize TinyPng instance with options
   async init(options: TinyPngOptions) {
-    this.PicGo = options.ctx
+    this.IPicGo = options.ctx
     this.options = options
     await this.readOrWriteConfig(this.options.keys)
-    this.PicGo.log.info('TinyPng初始化')
+    this.IPicGo.log.info('TinyPng initialized')
   }
 
+  // Upload image to TinyPng service
   async upload(url: string) {
-    this.PicGo.log.info('TinyPng开始上传')
+    this.IPicGo.log.info('TinyPng upload started')
+    const key = await this.getKey()
     if (isNetworkUrl(url)) {
-      return this.uploadImage({ url, originalUrl: url, key: await this.getKey() })
+      return this.uploadImage({ url, originalUrl: url, key })
     } else {
-      return this.uploadImage({
-        key: await this.getKey(),
-        originalUrl: url,
-        buffer: await getImageBuffer(this.PicGo, url),
-      })
+      const buffer = await getImageBuffer(this.IPicGo, url)
+      return this.uploadImage({ key, originalUrl: url, buffer })
     }
   }
 
+  // Get key with available usage count
   private async getKey() {
     const config = await this.readOrWriteConfig()
     const innerKeys = Object.keys(config).filter((key) => config[key].num !== -1)
     if (innerKeys.length <= 0) {
-      throw new Error('使用次数用完')
+      throw new Error('No available keys')
     }
     return innerKeys[0]
   }
 
+  // Upload image with specified options
   private uploadImage(options: { key: string; originalUrl: string; url?: string; buffer?: Buffer }): Promise<Buffer> {
-    this.PicGo.log.info('使用TinypngKey:' + options.key)
-
+    this.IPicGo.log.info('Using Tinypng key: ' + options.key)
     const bearer = Base64.stringify(Utf8.parse(`api:${options.key}`))
-
-    const fetchOptions = {
+    const headersObj = {
+      Host: 'api.tinify.com',
+      Authorization: `Basic ${bearer}`,
+    }
+    let bodyObj = {}
+    if (options.url) {
+      this.IPicGo.log.info('Uploading network image to TinyPng')
+      Object.assign(headersObj, {
+        'Content-Type': 'application/json',
+      })
+      Object.assign(bodyObj, {
+        source: { url: options.url },
+      })
+    }
+    if (options.buffer) {
+      this.IPicGo.log.info('Uploading local image to TinyPng')
+      bodyObj = options.buffer
+    }
+    return this.IPicGo.request({
       method: 'POST',
       url: TINYPNG_UPLOAD_URL,
       json: true,
       resolveWithFullResponse: true,
-      headers: {
-        Host: 'api.tinify.com',
-        Authorization: `Basic ${bearer}`,
-      },
-    }
-
-    if (options.url) {
-      this.PicGo.log.info('TinyPng 上传网络图片')
-      Object.assign(fetchOptions.headers, {
-        'Content-Type': 'application/json',
-      })
-      Object.assign(fetchOptions, {
-        body: {
-          source: {
-            url: options.url,
-          },
-        },
-      })
-    }
-
-    const req = this.PicGo.Request.request(fetchOptions)
-
-    if (options.buffer) {
-      this.PicGo.log.info('TinyPng 上传本地图片')
-      req.end(options.buffer)
-    }
-
-    return req.then((response: Response) => {
+      headers: headersObj,
+      body: bodyObj,
+    }).then((response) => {
       this.setConfig(options.key, parseInt(response.headers['compression-count'] as any))
       if (response.statusCode && response.statusCode >= 200 && response.statusCode <= 299) {
         console.log(response.statusCode)
         console.log(response.headers.location)
-        return getImageBuffer(this.PicGo, response.headers.location as any)
+        return getImageBuffer(this.IPicGo, response.headers.location as any)
       }
       if (response.statusCode === 429) {
         this.setConfig(options.key, -1)
         return this.upload(options.originalUrl)
       }
-      throw new Error('未知错误')
+      throw new Error('Unknown error')
     })
   }
 
+  // Set configuration with key and usage count
   private async setConfig(key: string, num: number) {
     const config = await this.readOrWriteConfig()
     config[key] = {
@@ -114,6 +107,7 @@ class TinyPng {
     await fs.writeJSON(this.cacheConfigPath, config)
   }
 
+  // Read or write configuration file
   private async readOrWriteConfig(keys?: string[]): Promise<TinyCacheConfig> {
     const config: TinyCacheConfig = {}
     if (await fs.pathExists(this.cacheConfigPath)) {

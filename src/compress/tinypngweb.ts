@@ -1,36 +1,49 @@
-import PicGo from 'picgo'
+import { IPicGo } from 'picgo';
 import { CommonParams, ImageInfo } from '../interface'
 import { TINYPNG_WEBUPLOAD_URL } from '../config'
-import { Response } from 'request'
 import { getImageBuffer, getImageInfo } from '../utils'
 
-function getHeaders() {
-  const v = 59 + Math.round(Math.random() * 10)
-  const v2 = Math.round(Math.random() * 100)
+/**
+ * Compress image using TinypngWeb service
+ * @param ctx The PicGo instance.
+ * @param imageUrl The URL of the image to be compressed.
+ * @returns A Promise that resolves to an ImageInfo object containing information about the compressed image.
+ */
+export function TinypngCompress(ctx: IPicGo, { imageUrl }: CommonParams): Promise<ImageInfo> {
+  return getImageBuffer(ctx, imageUrl).then((buffer) => {
+    ctx.log.info('TinypngWeb compression started');
+    return ctx.request({
+      url: TINYPNG_WEBUPLOAD_URL,
+      method: 'POST',
+      headers: getHeaders(),
+      body: buffer,
+      resolveWithFullResponse: true
+    }).then((resp) => {
+      if (resp.headers.location) {
+        ctx.log.info('TinypngWeb compression successful: ' + resp.headers.location);
+        ctx.log.info('Downloading Tinypng image');
+        return getImageBuffer(ctx, resp.headers.location);
+      }
+      // If compression failed, throw an error
+      throw new Error('TinypngWeb upload failed');
+    }).then((buffer) => {
+      return getImageInfo(imageUrl, buffer);
+    });
+  });
+}
+
+// Generate random user agent
+function getRandomUserAgent(): string {
+  const chromeVersion = `59.0.4044.${59 + Math.round(Math.random() * 10)}`;
+  const safariVersion = `537.36`;
+  return `Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/${chromeVersion} Safari/${safariVersion}`;
+}
+
+function getHeaders(): Record<string, string> {
   return {
     origin: TINYPNG_WEBUPLOAD_URL,
     referer: TINYPNG_WEBUPLOAD_URL,
     'content-type': 'application/x-www-form-urlencoded',
-    'user-agent': `Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/${v}.0.4044.${v2} Safari/537.36`,
-  }
-}
-
-export function TinypngCompress(ctx: PicGo, { imageUrl }: CommonParams): Promise<ImageInfo> {
-  return getImageBuffer(ctx, imageUrl).then((buffer) => {
-    ctx.log.info('TinypngWeb 压缩开始')
-    const req = ctx.Request.request({ url: TINYPNG_WEBUPLOAD_URL, method: 'POST', headers: getHeaders(), resolveWithFullResponse: true })
-    req.end(buffer)
-    return req
-      .then((data: Response) => {
-        if (data.headers.location) {
-          ctx.log.info('TinypngWeb 压缩成功:' + data.headers.location)
-          ctx.log.info('下载 Tinypng 图片')
-          return getImageBuffer(ctx, data.headers.location)
-        }
-        throw new Error('TinypngWeb 上传失败')
-      })
-      .then((buffer) => {
-        return getImageInfo(imageUrl, buffer)
-      })
-  })
+    'user-agent': getRandomUserAgent(),
+  };
 }
