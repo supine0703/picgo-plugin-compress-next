@@ -3,6 +3,7 @@
   "version": "1.1.0",
   "description": "Image compression plugin for PicGo. Encode images as webp losslessly",
   "main": "dist/index.js",
+  "type": "module",
   "publishConfig": {
     "access": "public"
   },

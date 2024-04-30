@@ -2,7 +2,7 @@ import * as fs from 'fs-extra';
 import { IPicGo } from 'picgo';
 import { imageSize } from 'image-size';
 import { extname, basename } from 'path';
-import { ImageInfo } from './interface';
+import { ImageInfo } from './interface.js';
 
 // Check if the URL is a network URL
 export function isNetworkUrl(url: string): boolean {

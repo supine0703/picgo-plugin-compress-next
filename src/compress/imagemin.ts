@@ -2,8 +2,8 @@ import imagemin from 'imagemin';
 import mozjpeg from 'imagemin-mozjpeg';
 import upng from 'imagemin-upng';
 import { IPicGo } from 'picgo';
-import { CommonParams, ImageInfo } from '../interface';
-import { getImageBuffer, getImageInfo } from '../utils';
+import { CommonParams, ImageInfo } from '../interface.js';
+import { getImageBuffer, getImageInfo } from '../utils.js';
 
 /**
  * Compresses an image using imagemin library with MozJPEG and UPNG plugins.

@@ -1,12 +1,12 @@
-import { IPicGo, IPluginConfig } from 'picgo';
-import { TinypngCompress } from './compress/tinypngweb';
-import { TinypngKeyCompress } from './compress/tinypng/index';
-import { ImageminCompress } from './compress/imagemin';
-import { Image2WebPCompress } from './compress/image2webp';
-import { CompressType } from './config';
-import { getUrlInfo } from './utils';
-import { IConfig } from './interface';
-import { SkipCompress } from './compress/skip';
+import { IPicGo, IPluginConfig, IPicGoPlugin } from 'picgo';
+import { TinypngCompress } from './compress/tinypngweb.js';
+import { TinypngKeyCompress } from './compress/tinypng/index.js';
+import { ImageminCompress } from './compress/imagemin.js';
+import { Image2WebPCompress } from './compress/image2webp.js';
+import { CompressType } from './config.js';
+import { getUrlInfo } from './utils.js';
+import { IConfig } from './interface.js';
+import { SkipCompress } from './compress/skip.js';
 
 // Allowed image file extensions
 const ALLOW_EXTNAME = ['.png', '.jpg', '.webp', '.jpeg'];
@@ -61,10 +61,10 @@ const handle = async (ctx: IPicGo): Promise<IPicGo> => {
 };
 
 // Export plugin function
-module.exports = function (ctx: IPicGo): any {
+const CompresseTransformers: IPicGoPlugin = () => {
   return {
     transformer: 'compress',
-    register() {
+    register(ctx: IPicGo) {
       // Register compression transformer
       ctx.helper.transformer.register('compress', { handle });
     },
@@ -91,3 +91,5 @@ module.exports = function (ctx: IPicGo): any {
     },
   };
 };
+
+export default CompresseTransformers

@@ -1,7 +1,7 @@
 import { IPicGo } from 'picgo';
-import { CommonParams, ImageInfo } from '../interface'
-import { TINYPNG_WEBUPLOAD_URL } from '../config'
-import { getImageBuffer, getImageInfo } from '../utils'
+import { CommonParams, ImageInfo } from '../interface.js';
+import { TINYPNG_WEBUPLOAD_URL } from '../config.js';
+import { getImageBuffer, getImageInfo } from '../utils.js';
 
 /**
  * Compress image using TinypngWeb service

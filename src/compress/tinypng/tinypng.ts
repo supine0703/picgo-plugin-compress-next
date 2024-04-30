@@ -1,10 +1,11 @@
-import * as path from 'path'
 import * as fs from 'fs-extra'
-import Base64 from 'crypto-js/enc-base64'
-import Utf8 from 'crypto-js/enc-utf8'
+import { dirname, join } from 'path';
+import { fileURLToPath } from 'url';
+import Base64 from 'crypto-js/enc-base64.js'
+import Utf8 from 'crypto-js/enc-utf8.js'
 import { IPicGo } from 'picgo'
-import { getImageBuffer, isNetworkUrl } from '../../utils'
-import { TINYPNG_UPLOAD_URL } from '../../config'
+import { getImageBuffer, isNetworkUrl } from '../../utils.js';
+import { TINYPNG_UPLOAD_URL } from '../../config.js';
 
 interface TinyPngOptions {
   keys: string[]
@@ -19,7 +20,7 @@ interface TinyCacheConfig {
 }
 
 class TinyPng {
-  private cacheConfigPath = path.join(__dirname, 'config.json')
+  private cacheConfigPath = join(dirname(fileURLToPath(import.meta.url)), 'config.json')
   private options!: TinyPngOptions
   private IPicGo!: IPicGo
 

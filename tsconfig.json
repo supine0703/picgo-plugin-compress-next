@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
-    "target": "es5",
-    "module": "commonjs",
+    "target": "ESNext",
+    "module": "ESNext",
     "outDir": "dist",
     "moduleResolution": "node",
     "skipLibCheck": true,
@@ -15,8 +15,7 @@
     "baseUrl": ".",
     "lib": [
       "es2017",
-      "es2015",
-      "es6"
+      "es2015"
     ]
   },
   "include": [
