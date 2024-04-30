@@ -1,47 +1,57 @@
-import * as fs from 'fs-extra'
-import PicGo from 'picgo'
-import { Response } from 'request'
-import { imageSize } from 'image-size'
-import { extname, basename } from 'path'
-import { ImageInfo } from './interface'
+import * as fs from 'fs-extra';
+import { IPicGo } from 'picgo';
+import { imageSize } from 'image-size';
+import { extname, basename } from 'path';
+import { ImageInfo } from './interface';
 
-export function isNetworkUrl(url: string) {
-  return url.startsWith('http://') || url.startsWith('https://')
+// Check if the URL is a network URL
+export function isNetworkUrl(url: string): boolean {
+  return url.startsWith('http://') || url.startsWith('https://');
 }
 
-export async function fetchImage(ctx: PicGo, url: string): Promise<Buffer> {
-  return await ctx.Request.request({ method: 'GET', url, encoding: null }).on('response', (response: Response): void => {
-    const contentType = response.headers['content-type']
-    if (contentType && !contentType.includes('image')) {
-      throw new Error(`${url} 不是图片`)
+// Fetch image data from a URL
+export async function fetchImage(ctx: IPicGo, url: string): Promise<Buffer> {
+  return await ctx.request({
+    method: 'GET',
+    url,
+    resolveWithFullResponse: true,
+    responseType: 'arraybuffer'
+  }).then((resp) => {
+    const contentType = resp.headers['content-type'];
+    if (contentType?.includes('image')) {
+      return resp.data as Buffer;
     }
-  })
+    throw new Error(`${url} is not an image`);
+  });
 }
 
-export function getImageBuffer(ctx: PicGo, imageUrl: string): Promise<Buffer> {
+// Get image buffer either from network or local file
+export function getImageBuffer(ctx: IPicGo, imageUrl: string): Promise<Buffer> {
   if (isNetworkUrl(imageUrl)) {
-    ctx.log.info('获取网络图片')
-    return fetchImage(ctx, imageUrl)
+    ctx.log.info('Fetching image from network');
+    return fetchImage(ctx, imageUrl);
   } else {
-    ctx.log.info('获取本地图片')
-    return fs.readFile(imageUrl)
+    ctx.log.info('Reading local image file');
+    return fs.readFile(imageUrl);
   }
 }
 
+// Get image information from image buffer
 export function getImageInfo(imageUrl: string, buffer: Buffer): ImageInfo {
-  const { width, height } = imageSize(buffer)
+  const { width, height } = imageSize(buffer);
   return {
     buffer,
     width: width as number,
     height: height as number,
     fileName: basename(imageUrl),
     extname: extname(imageUrl),
-  }
+  };
 }
 
+// Get information about the URL
 export function getUrlInfo(imageUrl: string) {
   return {
     fileName: basename(imageUrl),
     extname: extname(imageUrl),
-  }
+  };
 }
