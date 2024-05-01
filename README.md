@@ -1,8 +1,12 @@
 # Picgo Plugin Compress Webp Lossless
 
-This is a fork of the [picgo-plugin-compress](https://github.com/JuZiSang/picgo-plugin-compress) repository. The original project has been inactive for quite some time. It's intended to provide continued maintenance and support.
+This is a fork of the [picgo-plugin-compress](https://github.com/JuZiSang/picgo-plugin-compress) repository.
 
-This project is a plugin for [PicGo](https://github.com/Molunerfinn/PicGo) and [PicGo-Core](https://github.com/PicGo/PicGo-Core), enabling image compression using the remote service provided by [TinyPNG](https://tinypng.com/) or local compression using [imagemin](https://github.com/imagemin/imagemin). Additionally, it supports converting images to the WebP format.
+The original project has been inactive for quite some time. It's intended to provide continued maintenance and support.
+
+This project is a plugin for [PicGo](https://github.com/Molunerfinn/PicGo) and [PicGo-Core](https://github.com/PicGo/PicGo-Core), enabling image compression using the remote service provided by [TinyPNG](https://tinypng.com/) or local compression using [imagemin](https://github.com/imagemin/imagemin).
+
+Additionally, it supports lossless converting images to the WebP format.
 
 Several enhancements and updates have been implemented in this fork:
 
