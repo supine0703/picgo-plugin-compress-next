@@ -1,0 +1,40 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - '*'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 'latest'
+        
+      - name: Compile and Package
+        run: npm install && npm run build && zip -q -r picgo-plugin-compress-webp-lossless.zip dist
+
+      - name: Get Latest Release Version
+        id: get_latest_release
+        run: echo "VERSION=$(curl -s https://api.github.com/repos/mrgeneralgoo/picgo-plugin-compress-webp-lossless/releases/latest | jq -r .tag_name)" >> $GITHUB_OUTPUT
+
+      - name: Create Release
+        uses: ncipollo/release-action@v1
+        with:
+          token: ${{ secrets.AUTO_RELEASE_TOKEN }}
+          tag: ${{github.ref_name}}
+          artifacts: "picgo-plugin-compress-webp-lossless.zip"
+          body: |
+            **Full Changelog**: https://github.com/mrgeneralgoo/picgo-plugin-compress-webp-lossless/compare/${{ steps.get_latest_release.outputs.VERSION }}...${{github.ref_name}})
+
+      - name: Publishing to NPM
+        uses: JS-DevTools/npm-publish@v3
+        with:
+          token: ${{ secrets.NPM_TOKEN }}
