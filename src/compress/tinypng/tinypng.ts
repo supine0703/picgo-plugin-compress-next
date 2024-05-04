@@ -4,8 +4,8 @@ import { fileURLToPath } from 'url';
 import Base64 from 'crypto-js/enc-base64.js'
 import Utf8 from 'crypto-js/enc-utf8.js'
 import { IPicGo } from 'picgo'
-import { getImageBuffer, isNetworkUrl } from '../../utils.js';
-import { TINYPNG_UPLOAD_URL } from '../../config.js';
+import { getImageBuffer, isNetworkUrl } from '../../utils';
+import { TINYPNG_UPLOAD_URL } from '../../config';
 
 interface TinyPngOptions {
   keys: string[]

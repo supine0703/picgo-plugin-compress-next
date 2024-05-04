@@ -1,12 +1,12 @@
-import { IPicGo, IPluginConfig, IPicGoPlugin } from 'picgo';
-import { TinypngCompress } from './compress/tinypngweb.js';
-import { TinypngKeyCompress } from './compress/tinypng/index.js';
-import { ImageminCompress } from './compress/imagemin.js';
-import { Image2WebPCompress } from './compress/image2webp.js';
-import { CompressType } from './config.js';
-import { getUrlInfo } from './utils.js';
-import { IConfig } from './interface.js';
-import { SkipCompress } from './compress/skip.js';
+import { IPicGo, IPlugin, IPluginConfig, IPicGoPlugin } from 'picgo';
+import { TinypngCompress } from './compress/tinypngweb';
+import { TinypngKeyCompress } from './compress/tinypng/index';
+import { ImageminCompress } from './compress/imagemin';
+import { Image2WebPCompress } from './compress/image2webp';
+import { CompressType } from './config';
+import { getUrlInfo } from './utils';
+import { IConfig } from './interface';
+import { SkipCompress } from './compress/skip';
 
 // Allowed image file extensions
 const ALLOW_EXTNAME = ['.png', '.jpg', '.webp', '.jpeg'];
@@ -14,7 +14,7 @@ const ALLOW_EXTNAME = ['.png', '.jpg', '.webp', '.jpeg'];
 // Compression handler function
 const handle = async (ctx: IPicGo): Promise<IPicGo> => {
   // Get compression configuration
-  const config: IConfig = ctx.getConfig('transformer.compress') || ctx.getConfig('picgo-plugin-compress-webp-lossless');
+  const config: IConfig = ctx.getConfig('compress-webp-lossless');
   const compress = config?.compress;
   const key = config?.key || config?.tinypngKey;
 
@@ -61,15 +61,15 @@ const handle = async (ctx: IPicGo): Promise<IPicGo> => {
 };
 
 // Export plugin function
-const CompresseTransformers: IPicGoPlugin = () => {
+const CompresseTransformers: IPicGoPlugin = (ctx: IPicGo) => {
   return {
-    transformer: 'compress',
+    transformer: 'compress-webp-lossless',
     register(ctx: IPicGo) {
       // Register compression transformer
-      ctx.helper.transformer.register('compress', { handle });
+      ctx.helper.transformer.register('compress-webp-lossless', { handle });
     },
     config(ctx: IPicGo): IPluginConfig[] {
-      let config: IConfig = ctx.getConfig('transformer.compress') || ctx.getConfig('picgo-plugin-compress-webp-lossless');
+      let config: IConfig = ctx.getConfig('compress-webp-lossless');
 
       return [
         {
@@ -89,6 +89,9 @@ const CompresseTransformers: IPicGoPlugin = () => {
         },
       ];
     },
+    getHandle(ctx: IPicGo):IPlugin {
+      return { handle };
+    }
   };
 };
 

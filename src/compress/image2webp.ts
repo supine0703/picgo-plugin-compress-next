@@ -1,7 +1,7 @@
 import imagemin from 'imagemin';
 import imageminWebp from 'imagemin-webp';
-import { CommonParams, ImageInfo } from '../interface.js';
-import { getImageBuffer, getImageInfo } from '../utils.js';
+import { CommonParams, ImageInfo } from '../interface';
+import { getImageBuffer, getImageInfo } from '../utils';
 import { IPicGo } from 'picgo';
 
 /**

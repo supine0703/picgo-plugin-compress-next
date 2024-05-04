@@ -1,7 +1,7 @@
 import { IPicGo } from 'picgo';
-import { getImageInfo } from '../../utils.js';
-import { CommonParams, ImageInfo } from '../../interface.js';
-import Tinypng from './tinypng.js';
+import { getImageInfo } from '../../utils';
+import { CommonParams, ImageInfo } from '../../interface';
+import Tinypng from './tinypng';
 
 // Interface for Tinypng options
 export interface ITinypngOptions {
