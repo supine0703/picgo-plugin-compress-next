@@ -47,12 +47,17 @@ const handle = async (ctx: IPicGo): Promise<IPicGo> => {
 
   return Promise.all(tasks).then((output) => {
     // Log compressed image information
-    ctx.log.info('Compressed image info: ' + JSON.stringify(output.map((item) => ({
-      fileName: item.fileName,
-      extname: item.extname,
-      height: item.height,
-      width: item.width
-    }))));
+    ctx.log.info(
+      'Compressed image info: ' +
+        JSON.stringify(
+          output.map((item) => ({
+            fileName: item.fileName,
+            extname: item.extname,
+            height: item.height,
+            width: item.width,
+          })),
+        ),
+    );
 
     // Set output images
     ctx.output = output;
@@ -89,9 +94,9 @@ const CompressTransformers: IPicGoPlugin = (ctx: IPicGo) => {
         },
       ];
     },
-    getHandle(ctx: IPicGo):IPlugin {
+    getHandle(ctx: IPicGo): IPlugin {
       return { handle };
-    }
+    },
   };
 };
 

@@ -1,11 +1,11 @@
 declare module 'imagemin-upng' {
-  export default function upng(): any
+  export default function upng(): any;
 }
 
 declare module 'imagemin-webp' {
-  export default imageminWebp
+  export default imageminWebp;
 }
 
 declare module 'imagemin-gif2webp' {
-  export default imageminGif2webp
+  export default imageminGif2webp;
 }

@@ -12,23 +12,26 @@ import { getImageBuffer, getImageInfo } from '../utils';
 export function TinypngCompress(ctx: IPicGo, { imageUrl }: CommonParams): Promise<ImageInfo> {
   return getImageBuffer(ctx, imageUrl).then((buffer) => {
     ctx.log.info('TinypngWeb compression started');
-    return ctx.request({
-      url: TINYPNG_WEBUPLOAD_URL,
-      method: 'POST',
-      headers: getHeaders(),
-      body: buffer,
-      resolveWithFullResponse: true
-    }).then((resp) => {
-      if (resp.headers.location) {
-        ctx.log.info('TinypngWeb compression successful: ' + resp.headers.location);
-        ctx.log.info('Downloading Tinypng image');
-        return getImageBuffer(ctx, resp.headers.location);
-      }
-      // If compression failed, throw an error
-      throw new Error('TinypngWeb upload failed');
-    }).then((buffer) => {
-      return getImageInfo(imageUrl, buffer);
-    });
+    return ctx
+      .request({
+        url: TINYPNG_WEBUPLOAD_URL,
+        method: 'POST',
+        headers: getHeaders(),
+        body: buffer,
+        resolveWithFullResponse: true,
+      })
+      .then((resp) => {
+        if (resp.headers.location) {
+          ctx.log.info('TinypngWeb compression successful: ' + resp.headers.location);
+          ctx.log.info('Downloading Tinypng image');
+          return getImageBuffer(ctx, resp.headers.location);
+        }
+        // If compression failed, throw an error
+        throw new Error('TinypngWeb upload failed');
+      })
+      .then((buffer) => {
+        return getImageInfo(imageUrl, buffer);
+      });
   });
 }
 

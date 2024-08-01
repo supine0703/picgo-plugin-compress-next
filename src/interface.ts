@@ -1,18 +1,18 @@
 export interface ImageInfo {
-  fileName: string
-  extname: string
-  buffer: Buffer
-  width: number
-  height: number
+  fileName: string;
+  extname: string;
+  buffer: Buffer;
+  width: number;
+  height: number;
 }
 
 export interface CommonParams {
-  imageUrl: string
+  imageUrl: string;
 }
 
 export interface IConfig {
-  compress: string
-  key: string
-  tinypngKey: string
-  nameType: string
+  compress: string;
+  key: string;
+  tinypngKey: string;
+  nameType: string;
 }

@@ -72,13 +72,13 @@ describe('CompressTransformers', () => {
 
   describe('config', () => {
     it('should return the correct config options', () => {
-      const pluginName = plugin.transformer ?? ''
+      const pluginName = plugin.transformer ?? '';
 
-      expect(ctx.getConfig(pluginName)).toBeUndefined()
+      expect(ctx.getConfig(pluginName)).toBeUndefined();
 
       ctx.setConfig({ [pluginName]: (plugin.config ?? ((ctx: IPicGo) => []))(ctx) });
       const config = ctx.getConfig(pluginName) as IPluginConfig[];
-      expect(config).toEqual((plugin.config ?? ((ctx: IPicGo) => []))(ctx))
+      expect(config).toEqual((plugin.config ?? ((ctx: IPicGo) => []))(ctx));
 
       expect(config).toHaveLength(2);
       expect(config[0].name).toBe('compress');
@@ -92,6 +92,6 @@ describe('CompressTransformers', () => {
   });
 });
 
-function fail(reason = "fail was called in a test.") {
+function fail(reason = 'fail was called in a test.') {
   throw new Error(reason);
 }

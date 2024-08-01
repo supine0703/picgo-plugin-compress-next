@@ -11,18 +11,20 @@ export function isNetworkUrl(url: string): boolean {
 
 // Fetch image data from a URL
 export async function fetchImage(ctx: IPicGo, url: string): Promise<Buffer> {
-  return await ctx.request({
-    method: 'GET',
-    url,
-    resolveWithFullResponse: true,
-    responseType: 'arraybuffer'
-  }).then((resp) => {
-    const contentType = resp.headers['content-type'];
-    if (contentType?.includes('image')) {
-      return resp.data as Buffer;
-    }
-    throw new Error(`${url} is not an image`);
-  });
+  return await ctx
+    .request({
+      method: 'GET',
+      url,
+      resolveWithFullResponse: true,
+      responseType: 'arraybuffer',
+    })
+    .then((resp) => {
+      const contentType = resp.headers['content-type'];
+      if (contentType?.includes('image')) {
+        return resp.data as Buffer;
+      }
+      throw new Error(`${url} is not an image`);
+    });
 }
 
 // Get image buffer either from network or local file
