@@ -20,7 +20,8 @@ interface TinyCacheConfig {
 }
 
 class TinyPng {
-  private cacheConfigPath = join(dirname(fileURLToPath(import.meta.url)), 'config.json')
+  // private cacheConfigPath = join(dirname(fileURLToPath(import.meta.url)), 'config.json'); // ES6
+  private cacheConfigPath = join(__dirname, 'config.json'); // CommonJs
   private options!: TinyPngOptions
   private IPicGo!: IPicGo
 

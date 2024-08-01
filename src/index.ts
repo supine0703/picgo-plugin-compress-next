@@ -61,7 +61,7 @@ const handle = async (ctx: IPicGo): Promise<IPicGo> => {
 };
 
 // Export plugin function
-const CompresseTransformers: IPicGoPlugin = (ctx: IPicGo) => {
+const CompressTransformers: IPicGoPlugin = (ctx: IPicGo) => {
   return {
     transformer: 'compress-webp-lossless',
     register(ctx: IPicGo) {
@@ -95,4 +95,8 @@ const CompresseTransformers: IPicGoPlugin = (ctx: IPicGo) => {
   };
 };
 
-export default CompresseTransformers
+export default CompressTransformers;
+/**
+ * CommonJs module exports, if do not this, the plugin will not be loaded
+ */
+module.exports = CompressTransformers;

@@ -1,6 +1,6 @@
 import { PicGo, IPicGo, IPluginConfig, IPicGoPlugin, IPicGoPluginInterface } from 'picgo';
 import { CompressType } from '../src/config';
-import CompresseTransformers from '../src/index';
+import CompressTransformers from '../src/index';
 
 jest.mock('../src/compress/tinypngweb', () => ({
   TinypngCompress: jest.fn().mockReturnValue({
@@ -47,13 +47,13 @@ jest.mock('../src/compress/skip', () => ({
   }),
 }));
 
-describe('CompresseTransformers', () => {
+describe('CompressTransformers', () => {
   let ctx: IPicGo;
   let plugin: IPicGoPluginInterface;
 
   beforeEach(() => {
     ctx = new PicGo();
-    plugin = CompresseTransformers(ctx);
+    plugin = CompressTransformers(ctx);
     if (!plugin.transformer) {
       return fail('transformer is not defined');
     }
