@@ -57,7 +57,7 @@ class TinyPng {
 
   // Upload image with specified options
   private uploadImage(options: { key: string; originalUrl: string; url?: string; buffer?: Buffer }): Promise<Buffer> {
-    this.IPicGo.log.info('Using Tinypng key: ' + options.key);
+    this.IPicGo.log.info('Using TinyPng key:', options.key);
     const bearer = Base64.stringify(Utf8.parse(`api:${options.key}`));
     const headersObj = {
       Host: 'api.tinify.com',

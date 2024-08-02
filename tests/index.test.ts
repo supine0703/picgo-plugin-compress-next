@@ -3,7 +3,7 @@ import { CompressType } from '../src/config';
 import CompressTransformers from '../src/index';
 
 jest.mock('../src/compress/tinypngweb', () => ({
-  TinypngCompress: jest.fn().mockReturnValue({
+  TinyPngCompress: jest.fn().mockReturnValue({
     fileName: 'compressed.png',
     extname: '.png',
     height: 100,
@@ -12,7 +12,7 @@ jest.mock('../src/compress/tinypngweb', () => ({
 }));
 
 jest.mock('../src/compress/tinypng/index', () => ({
-  TinypngKeyCompress: jest.fn().mockReturnValue({
+  TinyPngKeyCompress: jest.fn().mockReturnValue({
     fileName: 'compressed.jpg',
     extname: '.jpg',
     height: 150,

@@ -7,3 +7,5 @@ export enum CompressType {
   imagemin = 'imagemin',
   image2webp = 'image2webp',
 }
+
+export const PROJ_CONF = 'compress-next';

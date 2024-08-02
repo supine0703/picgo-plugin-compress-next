@@ -1,43 +1,48 @@
 import { IPicGo, IPlugin, IPluginConfig, IPicGoPlugin } from 'picgo';
-import { TinypngCompress } from './compress/tinypngweb';
-import { TinypngKeyCompress } from './compress/tinypng/index';
+import { TinyPngCompress } from './compress/tinypngweb';
+import { TinyPngKeyCompress } from './compress/tinypng/index';
 import { ImageminCompress } from './compress/imagemin';
 import { Image2WebPCompress } from './compress/image2webp';
 import { CompressType } from './config';
 import { getUrlInfo } from './utils';
 import { IConfig } from './interface';
 import { SkipCompress } from './compress/skip';
+import { PROJ_CONF } from './config';
 
 // Allowed image file extensions
 const ALLOW_EXTNAME = ['.png', '.jpg', '.webp', '.jpeg'];
 
+// Get configuration from ctx
+const getConfig = (ctx: IPicGo): IConfig => {
+  return ctx.getConfig(PROJ_CONF) || ctx.getConfig(`picgo-plugin-${PROJ_CONF}`);
+};
+
 // Compression handler function
 const handle = async (ctx: IPicGo): Promise<IPicGo> => {
   // Get compression configuration
-  const config: IConfig = ctx.getConfig('compress-webp-lossless');
+  const config: IConfig = getConfig(ctx);
   const compress = config?.compress;
   const key = config?.key || config?.tinypngKey;
 
   // Log compression setting
-  ctx.log.info('Compression type: ' + compress);
+  ctx.log.info('Compression type:', compress);
 
   // Process images
   const tasks = ctx.input.map((imageUrl) => {
     // Log image URL
-    ctx.log.info('Image URL: ' + imageUrl);
+    ctx.log.info('Image URL:', imageUrl);
     const info = getUrlInfo(imageUrl);
     // Log image information
-    ctx.log.info('Image info: ' + JSON.stringify(info));
+    ctx.log.info('Image info:', JSON.stringify(info));
     if (ALLOW_EXTNAME.includes(info.extname.toLowerCase())) {
       switch (compress) {
-        case CompressType.tinypng:
-          return key ? TinypngKeyCompress(ctx, { imageUrl, key }) : TinypngCompress(ctx, { imageUrl });
         case CompressType.imagemin:
           return ImageminCompress(ctx, { imageUrl });
         case CompressType.image2webp:
           return Image2WebPCompress(ctx, { imageUrl });
+        case CompressType.tinypng:
         default:
-          return key ? TinypngKeyCompress(ctx, { imageUrl, key }) : TinypngCompress(ctx, { imageUrl });
+          return key ? TinyPngKeyCompress(ctx, { imageUrl, key }) : TinyPngCompress(ctx, { imageUrl });
       }
     }
     // Log unsupported format warning
@@ -48,15 +53,15 @@ const handle = async (ctx: IPicGo): Promise<IPicGo> => {
   return Promise.all(tasks).then((output) => {
     // Log compressed image information
     ctx.log.info(
-      'Compressed image info: ' +
-        JSON.stringify(
-          output.map((item) => ({
-            fileName: item.fileName,
-            extname: item.extname,
-            height: item.height,
-            width: item.width,
-          })),
-        ),
+      'Compressed image info:',
+      JSON.stringify(
+        output.map((item) => ({
+          fileName: item.fileName,
+          extname: item.extname,
+          height: item.height,
+          width: item.width,
+        })),
+      ),
     );
 
     // Set output images
@@ -68,13 +73,13 @@ const handle = async (ctx: IPicGo): Promise<IPicGo> => {
 // Export plugin function
 const CompressTransformers: IPicGoPlugin = (ctx: IPicGo) => {
   return {
-    transformer: 'compress-webp-lossless',
+    transformer: 'compress-next',
     register(ctx: IPicGo) {
       // Register compression transformer
-      ctx.helper.transformer.register('compress-webp-lossless', { handle });
+      ctx.helper.transformer.register('compress-next', { handle });
     },
     config(ctx: IPicGo): IPluginConfig[] {
-      let config: IConfig = ctx.getConfig('compress-webp-lossless');
+      let config: IConfig = getConfig(ctx);
 
       return [
         {

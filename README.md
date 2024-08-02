@@ -18,4 +18,4 @@ Feel free to contribute to this project or report any issues you encounter. Your
 
 # Reporting Issues  
 
-[You can click here directly to create an issue](https://github.com/mrgeneralgoo/picgo-plugin-compress-webp-lossless/issues/new)
+[You can click here directly to create an issue](https://github.com/supine0703/picgo-plugin-compress-next/issues/new)
