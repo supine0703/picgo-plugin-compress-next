@@ -21,7 +21,9 @@
   "keywords": [
     "picgo",
     "picgo-plugin",
-    "picgo-gui-plugin"
+    "picgo-gui-plugin",
+    "compress",
+    "compress-next"
   ],
   "devDependencies": {
     "@types/crypto-js": "^4.2.2",
