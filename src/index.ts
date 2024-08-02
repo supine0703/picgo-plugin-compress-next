@@ -73,14 +73,15 @@ const handle = async (ctx: IPicGo): Promise<IPicGo> => {
 // Export plugin function
 const CompressTransformers: IPicGoPlugin = (ctx: IPicGo) => {
   return {
-    transformer: 'compress-next',
+    transformer: PROJ_CONF,
     register(ctx: IPicGo) {
       // Register compression transformer
-      ctx.helper.transformer.register('compress-next', { handle });
+      ctx.helper.transformer.register(PROJ_CONF, { handle });
     },
     config(ctx: IPicGo): IPluginConfig[] {
       let config: IConfig = getConfig(ctx);
 
+      // input, confirm, password, list, checkbox
       return [
         {
           name: 'compress',
@@ -93,9 +94,12 @@ const CompressTransformers: IPicGoPlugin = (ctx: IPicGo) => {
         {
           name: 'key',
           type: 'input',
-          message: 'Enter API key(s). Leave blank to use Web API. Separate multiple keys with commas.',
+          message: 'Enter API key(s). This is required if tinypng. Separate multiple keys with commas.',
           default: config?.key || config?.tinypngKey || null,
           required: false,
+          when(answer: any): boolean {
+            return answer.compress === CompressType.tinypng;
+          },
         },
       ];
     },

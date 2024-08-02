@@ -1,6 +1,6 @@
 {
   "name": "picgo-plugin-compress-next",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Image compression plugin for PicGo(>=^2.3.0). Update, adapt and optimize. Better support and richer features",
   "main": "dist/index.js",
   "type": "commonjs",

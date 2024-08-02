@@ -13,11 +13,10 @@ interface TinyPngOptions {
 }
 
 interface TinyCacheConfig {
-  [key: string]: {
-    key: string;
-    num: number;
-  };
+  [key: string]: number;
 }
+
+const errCodes = [-1, -2];
 
 class TinyPng {
   // private cacheConfigPath = join(dirname(fileURLToPath(import.meta.url)), 'config.json'); // ES6
@@ -48,7 +47,7 @@ class TinyPng {
   // Get key with available usage count
   private async getKey() {
     const config = await this.readOrWriteConfig();
-    const innerKeys = Object.keys(config).filter((key) => config[key].num >= 0);
+    const innerKeys = Object.keys(config).filter((key) => !errCodes.includes(config[key]));
     if (innerKeys.length <= 0) {
       throw new Error('No available keys');
     }
@@ -95,13 +94,13 @@ class TinyPng {
           return getImageBuffer(this.IPicGo, response.headers.location as any);
         }
         if (response.statusCode === 429) {
-          this.setConfig(options.key, -1);
+          this.setConfig(options.key, errCodes[0]);
           return this.upload(options.originalUrl);
         }
       })
       .catch((err) => {
         this.IPicGo.log.warn('this key is invalid, status code:', err.response.statusCode || err.response.status);
-        return this.setConfig(options.key, -2).then(() => {
+        return this.setConfig(options.key, errCodes[1]).then(() => {
           return this.upload(options.originalUrl) as any;
         });
       });
@@ -110,10 +109,7 @@ class TinyPng {
   // Set configuration with key and usage count
   private async setConfig(key: string, num: number) {
     const config = await this.readOrWriteConfig();
-    config[key] = {
-      key,
-      num,
-    };
+    config[key] = num;
     await fs.writeJSON(this.cacheConfigPath, config);
   }
 
@@ -130,10 +126,7 @@ class TinyPng {
         this.cacheConfigPath,
         keys.reduce((res, key) => {
           if (!res[key]) {
-            res[key] = {
-              key,
-              num: 0,
-            };
+            res[key] = 0;
           }
           return res;
         }, config),
