@@ -48,7 +48,7 @@ class TinyPng {
   // Get key with available usage count
   private async getKey() {
     const config = await this.readOrWriteConfig();
-    const innerKeys = Object.keys(config).filter((key) => config[key].num !== -1);
+    const innerKeys = Object.keys(config).filter((key) => config[key].num >= 0);
     if (innerKeys.length <= 0) {
       throw new Error('No available keys');
     }
@@ -84,19 +84,27 @@ class TinyPng {
       resolveWithFullResponse: true,
       headers: headersObj,
       body: bodyObj,
-    }).then((response) => {
-      this.setConfig(options.key, parseInt(response.headers['compression-count'] as any));
-      if (response.statusCode && response.statusCode >= 200 && response.statusCode <= 299) {
-        console.log(response.statusCode);
-        console.log(response.headers.location);
-        return getImageBuffer(this.IPicGo, response.headers.location as any);
-      }
-      if (response.statusCode === 429) {
-        this.setConfig(options.key, -1);
-        return this.upload(options.originalUrl);
-      }
-      throw new Error('Unknown error');
-    });
+    })
+      .then((response) => {
+        const count: number = parseInt(response.headers['compression-count'] as any);
+        this.setConfig(options.key, count);
+        if (response.statusCode && response.statusCode >= 200 && response.statusCode <= 299) {
+          this.IPicGo.log.success('TinyPng upload successful, status code:', response.statusCode);
+          this.IPicGo.log.info('Compression count:', count);
+          this.IPicGo.log.info('Compression url:', response.headers.location);
+          return getImageBuffer(this.IPicGo, response.headers.location as any);
+        }
+        if (response.statusCode === 429) {
+          this.setConfig(options.key, -1);
+          return this.upload(options.originalUrl);
+        }
+      })
+      .catch((err) => {
+        this.IPicGo.log.warn('this key is invalid, status code:', err.response.statusCode || err.response.status);
+        return this.setConfig(options.key, -2).then(() => {
+          return this.upload(options.originalUrl) as any;
+        });
+      });
   }
 
   // Set configuration with key and usage count

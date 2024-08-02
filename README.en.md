@@ -98,7 +98,7 @@ So there is ***`picgo-plugin-compress-next`*** birth 🎉
 - [x] Multiple keys can be used in combination
 - [x] supports TinyPng compression for `PicGo >= v2.3.1`
 - [x] disables `TinyPngWeb` and throws an exception
-- [ ] Handle error `Key` and skip (under test)
+- [x] Handle error `Key` and skip (under test)
 - [ ] Handling refresh of `Key` (under test)
 
 

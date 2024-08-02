@@ -15,7 +15,7 @@ export interface ITinyPngOptions {
  * @returns A Promise that resolves to an ImageInfo object containing information about the compressed image.
  */
 export function TinyPngKeyCompress(ctx: IPicGo, { imageUrl, key }: CommonParams & ITinyPngOptions): Promise<ImageInfo> {
-  return TinyPng.init({ ctx, keys: key!.split(',') })
+  return TinyPng.init({ ctx, keys: key!.split(',').map((k) => k.trim()) })
     .then(() => {
       return TinyPng.upload(imageUrl);
     })
