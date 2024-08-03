@@ -8,13 +8,13 @@ This is a fork of the  [picgo-plugin-compress-webp-lossless](https://github.com/
 
 # ⚗️ Background
 
-[picgo-plugin-compress](https://github.com/JuZiSang/picgo-plugin-compress) has been a long time not updated, The key is in ` PicGo ` underlying upload library from ` request ` migrated to ` axios `, reference [PicGo/PicGo-Core#65](https://github.com/PicGo/PicGo-Core/issues/65), led to [TinyPng](https://tinypng.com/) is unavailable. Seems to be the last available version is [PicGo v2.3.0](https://github.com/Molunerfinn/PicGo/releases/tag/v2.3.0).  
+The [picgo-plugin-compress](https://github.com/JuZiSang/picgo-plugin-compress) has been a long time not updated, The key is in ` PicGo ` underlying upload library from ` request ` migrated to ` axios `, reference [PicGo/PicGo-Core#65](https://github.com/PicGo/PicGo-Core/issues/65), led to [TinyPng](https://tinypng.com/) is unavailable. Seems to be the last available version is [PicGo v2.3.0](https://github.com/Molunerfinn/PicGo/releases/tag/v2.3.0).  
 
-Fortunately I found [picgo-plugin-compress-webp-lossless](https://github.com/mrgeneralgoo/picgo-plugin-compress-webp-lossless), But its only upload [v1.0.1](https://www.npmjs.com/package/picgo-plugin-compress-webp-lossless). Its implementation is still through older versions of [picgo-plugin-compress](https://github.com/JuZiSang/picgo-plugin-compress). However, the code updates the ` v1.1.0 `, but after refactoring with 'ES' it is not compatible with 'PicGo', and there are still some problems.
+Fortunately I found the [picgo-plugin-compress-webp-lossless](https://github.com/mrgeneralgoo/picgo-plugin-compress-webp-lossless), But its only upload [v1.0.1](https://www.npmjs.com/package/picgo-plugin-compress-webp-lossless). Its implementation is still through older versions of the [picgo-plugin-compress](https://github.com/JuZiSang/picgo-plugin-compress). However, the code updates the ` v1.1.0 `, but after refactoring with 'ES' it is not compatible with 'PicGo', and there are still some problems.
 
 So there is ***`picgo-plugin-compress-next`*** birth 🎉
 
-# 💥 comparison
+# 💥 Comparison
 
 <table border=2 style="
   width: auto;
@@ -74,9 +74,9 @@ So there is ***`picgo-plugin-compress-next`*** birth 🎉
   <tr>
     <td>✅</td>
     <td>
-      Manual refresh <b>Valid</b> Key<br>
-      Supports manual refreshing of <b>all</b> keys<br>
-      You can set whether the Key is <b>automatically</b> refreshed across months
+      Supports manual refreshing of <b>Valid</b> Keys<br>
+      Supports manual refreshing of <b>all</b> Keys<br>
+      Can be set to <b>automatically</b> refresh Key if across months
     </td>
     <td>❌</td>
     <td>
@@ -98,8 +98,11 @@ So there is ***`picgo-plugin-compress-next`*** birth 🎉
 - [x] Multiple keys can be used in combination
 - [x] supports TinyPng compression for `PicGo >= v2.3.1`
 - [x] disables `TinyPngWeb` and throws an exception
-- [x] Handle error `Key` and skip (under test)
-- [ ] Handling refresh of `Key` (under test)
+- [x] Handle error `Key` and skip
+- [ ] Handling refresh of `Key`
+  - [x] Refreshing of `valid keys`
+  - [x] Refreshing of `all keys`
+  - [ ] `Automatically` refresh `valid keys` if across months
 
 
 # Reporting Issues  

@@ -1,6 +1,6 @@
 import { IPicGo, IPlugin, IPluginConfig, IPicGoPlugin } from 'picgo';
 import { TinyPngCompress } from './compress/tinypngweb';
-import { TinyPngKeyCompress } from './compress/tinypng/index';
+import { TinyPngKeyCompress, RefreshTinyPngConfig } from './compress/tinypng/index';
 import { ImageminCompress } from './compress/imagemin';
 import { Image2WebPCompress } from './compress/image2webp';
 import { CompressType } from './config';
@@ -77,6 +77,32 @@ const CompressTransformers: IPicGoPlugin = (ctx: IPicGo) => {
     register(ctx: IPicGo) {
       // Register compression transformer
       ctx.helper.transformer.register(PROJ_CONF, { handle });
+    },
+    guiMenu(ctx: IPicGo) {
+      // Get compression key(s)
+      const config: IConfig = getConfig(ctx);
+      const key = config?.key || config?.tinypngKey;
+      const success = (ctx: IPicGo, guiApi: any, info: string) => {
+        ctx.log.success(info);
+        guiApi.showNotification({
+          title: 'Success',
+          body: info,
+        });
+      };
+      return [
+        {
+          label: 'Refresh active TinyPng API Keys',
+          async handle(ctx, guiApi) {
+            await RefreshTinyPngConfig(ctx, { key }).then((info) => success(ctx, guiApi, info));
+          },
+        },
+        {
+          label: 'Clear cache of TinyPng API Keys',
+          async handle(ctx, guiApi) {
+            const info = await RefreshTinyPngConfig(ctx, { key }, true).then((info) => success(ctx, guiApi, info));
+          },
+        },
+      ];
     },
     config(ctx: IPicGo): IPluginConfig[] {
       let config: IConfig = getConfig(ctx);

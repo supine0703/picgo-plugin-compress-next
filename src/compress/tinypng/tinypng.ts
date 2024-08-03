@@ -44,6 +44,25 @@ class TinyPng {
     }
   }
 
+  // Refresh TinyPng API Keys
+  async refresh(clear: boolean): Promise<string> {
+    if (clear) {
+      try {
+        await fs.remove(this.cacheConfigPath);
+        return 'Cache of TinyPng API Keys cleared';
+      } catch (err) {
+        throw err;
+      }
+    } else {
+      const config = await this.readOrWriteConfig();
+      await fs.writeJSON(
+        this.cacheConfigPath,
+        Object.fromEntries(Object.entries(config).filter(([key, value]) => value !== errCodes[0])),
+      );
+      return 'TinyPng API Keys refreshed';
+    }
+  }
+
   // Get key with available usage count
   private async getKey() {
     const config = await this.readOrWriteConfig();
