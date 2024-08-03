@@ -103,6 +103,7 @@ So there is ***`picgo-plugin-compress-next`*** birth 🎉
   - [x] Refreshing of `valid keys`
   - [x] Refreshing of `all keys`
   - [x] `Automatically` refresh `valid keys` if across months
+- [ ] add `webp-converter` (Smaller volume)
 
 
 # Reporting Issues  
