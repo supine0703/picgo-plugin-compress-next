@@ -12,6 +12,11 @@ interface TinyPngOptions {
   ctx: IPicGo;
 }
 
+interface TinyCache {
+  date?: number;
+  keys: TinyCacheConfig;
+}
+
 interface TinyCacheConfig {
   [key: string]: number;
 }
@@ -23,11 +28,18 @@ class TinyPng {
   private cacheConfigPath = join(__dirname, 'config.json'); // CommonJs
   private options!: TinyPngOptions;
   private IPicGo!: IPicGo;
+  private date = (() => {
+    const now = new Date();
+    return now.getFullYear() * 100 + now.getMonth() + 1;
+  })();
 
   // Initialize TinyPng instance with options
-  async init(options: TinyPngOptions) {
+  async init(options: TinyPngOptions, openRefreshIfCheck: boolean = false) {
     this.IPicGo = options.ctx;
     this.options = options;
+    if (openRefreshIfCheck) {
+      await this.refreshIfCheck();
+    }
     await this.readOrWriteConfig(this.options.keys);
     this.IPicGo.log.info('TinyPng initialized');
   }
@@ -55,10 +67,7 @@ class TinyPng {
       }
     } else {
       const config = await this.readOrWriteConfig();
-      await fs.writeJSON(
-        this.cacheConfigPath,
-        Object.fromEntries(Object.entries(config).filter(([key, value]) => value !== errCodes[0])),
-      );
+      await this.writeJSON(Object.fromEntries(Object.entries(config).filter(([key, value]) => value !== errCodes[0])));
       return 'TinyPng API Keys refreshed';
     }
   }
@@ -129,20 +138,19 @@ class TinyPng {
   private async setConfig(key: string, num: number) {
     const config = await this.readOrWriteConfig();
     config[key] = num;
-    await fs.writeJSON(this.cacheConfigPath, config);
+    await this.writeJSON(config);
   }
 
   // Read or write configuration file
   private async readOrWriteConfig(keys?: string[]): Promise<TinyCacheConfig> {
     const config: TinyCacheConfig = {};
     if (await fs.pathExists(this.cacheConfigPath)) {
-      Object.assign(config, await fs.readJSON(this.cacheConfigPath));
+      Object.assign(config, await fs.readJSON(this.cacheConfigPath).then((res) => res.keys));
     } else {
-      await fs.writeJSON(this.cacheConfigPath, {});
+      await this.writeJSON(config);
     }
     if (keys) {
-      await fs.writeJSON(
-        this.cacheConfigPath,
+      await this.writeJSON(
         keys.reduce((res, key) => {
           if (!res[key]) {
             res[key] = 0;
@@ -152,6 +160,25 @@ class TinyPng {
       );
     }
     return config;
+  }
+
+  // Write JSON to configuration file with date
+  private async writeJSON(config: TinyCacheConfig) {
+    const cache: TinyCache = { date: this.date, keys: config };
+    await fs.writeJSON(this.cacheConfigPath, cache);
+  }
+
+  // Refresh if check of after month is true
+  private async refreshIfCheck() {
+    if (await fs.pathExists(this.cacheConfigPath)) {
+      const arr: number[] = [];
+      Object.assign(arr, await fs.readJSON(this.cacheConfigPath).then((res) => [res.date]));
+      const date = arr[0] || 0;
+      this.IPicGo.log.info('Need refresh, current date:', this.date, '!==', 'cache date:', date);
+      if (date !== this.date) {
+        this.IPicGo.log.success(await this.refresh(false));
+      }
+    }
   }
 }
 

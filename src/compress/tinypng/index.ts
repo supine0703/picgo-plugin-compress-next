@@ -13,10 +13,15 @@ export interface ITinyPngOptions {
  * @param ctx The PicGo instance.
  * @param imageUrl The URL of the image to be compressed.
  * @param key The TinyPng API key(s).
+ * @param refresh Whether to automatically update across months.
  * @returns A Promise that resolves to an ImageInfo object containing information about the compressed image.
  */
-export function TinyPngKeyCompress(ctx: IPicGo, { imageUrl, key }: CommonParams & ITinyPngOptions): Promise<ImageInfo> {
-  return TinyPng.init({ ctx, keys: key!.split(',').map((k) => k.trim()) })
+export function TinyPngKeyCompress(
+  ctx: IPicGo,
+  { imageUrl, key }: CommonParams & ITinyPngOptions,
+  refresh: boolean,
+): Promise<ImageInfo> {
+  return TinyPng.init({ ctx, keys: key!.split(',').map((k) => k.trim()) }, refresh)
     .then(() => {
       return TinyPng.upload(imageUrl);
     })

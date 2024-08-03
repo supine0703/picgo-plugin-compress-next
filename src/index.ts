@@ -23,6 +23,7 @@ const handle = async (ctx: IPicGo): Promise<IPicGo> => {
   const config: IConfig = getConfig(ctx);
   const compress = config?.compress;
   const key = config?.key || config?.tinypngKey;
+  const refresh = config?.refreshAfterMonth;
 
   // Log compression setting
   ctx.log.info('Compression type:', compress);
@@ -42,7 +43,7 @@ const handle = async (ctx: IPicGo): Promise<IPicGo> => {
           return Image2WebPCompress(ctx, { imageUrl });
         case CompressType.tinypng:
         default:
-          return key ? TinyPngKeyCompress(ctx, { imageUrl, key }) : TinyPngCompress(ctx, { imageUrl });
+          return key ? TinyPngKeyCompress(ctx, { imageUrl, key }, refresh) : TinyPngCompress(ctx, { imageUrl });
       }
     }
     // Log unsupported format warning
@@ -116,6 +117,15 @@ const CompressTransformers: IPicGoPlugin = (ctx: IPicGo) => {
           choices: Object.keys(CompressType),
           default: config?.compress || CompressType.tinypng,
           required: true,
+        },
+        {
+          name: 'refreshAfterMonth',
+          type: 'confirm',
+          default: false,
+          required: true,
+          when(answer: any): boolean {
+            return answer.compress === CompressType.tinypng;
+          },
         },
         {
           name: 'key',

@@ -99,10 +99,10 @@ So there is ***`picgo-plugin-compress-next`*** birth 🎉
 - [x] supports TinyPng compression for `PicGo >= v2.3.1`
 - [x] disables `TinyPngWeb` and throws an exception
 - [x] Handle error `Key` and skip
-- [ ] Handling refresh of `Key`
+- [x] Handling refresh of `Key`
   - [x] Refreshing of `valid keys`
   - [x] Refreshing of `all keys`
-  - [ ] `Automatically` refresh `valid keys` if across months
+  - [x] `Automatically` refresh `valid keys` if across months
 
 
 # Reporting Issues  

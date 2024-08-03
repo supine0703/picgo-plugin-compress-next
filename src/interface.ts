@@ -15,4 +15,5 @@ export interface IConfig {
   key: string;
   tinypngKey: string;
   nameType: string;
+  refreshAfterMonth: boolean;
 }
