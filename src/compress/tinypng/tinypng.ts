@@ -45,7 +45,7 @@ class TinyPng {
   }
 
   // Upload image to TinyPng service
-  async upload(url: string) {
+  async upload(url: string): Promise<Buffer> {
     this.IPicGo.log.info('TinyPng upload started');
     const key = await this.getKey();
     if (isNetworkUrl(url)) {
@@ -73,7 +73,7 @@ class TinyPng {
   }
 
   // Get key with available usage count
-  private async getKey() {
+  private async getKey(): Promise<string> {
     const config = await this.readOrWriteConfig();
     const innerKeys = Object.keys(config).filter((key) => !errCodes.includes(config[key]));
     if (innerKeys.length <= 0) {

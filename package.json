@@ -48,6 +48,7 @@
     "imagemin-mozjpeg": "^8.0.0",
     "imagemin-upng": "^2.0.3",
     "imagemin-webp": "^6.1.0",
-    "mozjpeg": "github:imagemin/mozjpeg-bin#c0587fbc00b21ed8cad8bae499a0827baeaf7ffa"
+    "mozjpeg": "github:imagemin/mozjpeg-bin#c0587fbc00b21ed8cad8bae499a0827baeaf7ffa",
+    "webp-converter": "^2.3.3"
   }
 }

@@ -9,3 +9,12 @@ declare module 'imagemin-webp' {
 declare module 'imagemin-gif2webp' {
   export default imageminGif2webp;
 }
+
+declare module 'webp-converter' {
+  export function buffer2webpbuffer(
+    buffer: Buffer,
+    image_type: string,
+    option: string,
+    extra_path?: string,
+  ): Promise<Buffer>;
+}

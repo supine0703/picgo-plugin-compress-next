@@ -11,9 +11,8 @@ export interface CommonParams {
 }
 
 export interface IConfig {
-  compress: string;
-  key: string;
-  tinypngKey: string;
   nameType: string;
-  refreshAfterMonth: boolean;
+  'Compress Type': string;
+  'Auto Refresh TinyPng Key Across Months': boolean;
+  'TinyPng API Key': string;
 }

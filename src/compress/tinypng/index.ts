@@ -34,11 +34,10 @@ export function TinyPngKeyCompress(
 /**
  * Function to refresh or clear TinyPng API key
  * @param ctx The PicGo instance.
- * @param key The TinyPng API key(s).
  * @param clear A boolean indicating whether to clear the key.
  */
-export function RefreshTinyPngConfig(ctx: IPicGo, { key }: ITinyPngOptions, clear: boolean = false): Promise<string> {
-  return TinyPng.init({ ctx, keys: key.split(',').map((k) => k.trim()) }).then(() => {
+export function RefreshTinyPngConfig(ctx: IPicGo, clear: boolean = false): Promise<string> {
+  return TinyPng.init({ ctx, keys:[] }).then(() => {
     return TinyPng.refresh(clear);
   });
 }

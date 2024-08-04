@@ -3,6 +3,7 @@ import { TinyPngCompress } from './compress/tinypngweb';
 import { TinyPngKeyCompress, RefreshTinyPngConfig } from './compress/tinypng/index';
 import { ImageminCompress } from './compress/imagemin';
 import { Image2WebPCompress } from './compress/image2webp';
+import { WebPConverterCompress } from './compress/webpConverter';
 import { CompressType } from './config';
 import { getUrlInfo } from './utils';
 import { IConfig } from './interface';
@@ -12,18 +13,34 @@ import { PROJ_CONF } from './config';
 // Allowed image file extensions
 const ALLOW_EXTNAME = ['.png', '.jpg', '.webp', '.jpeg'];
 
+const CONF_KEYS: ['Compress Type', 'Auto Refresh TinyPng Key Across Months', 'TinyPng API Key'] = [
+  'Compress Type',
+  'Auto Refresh TinyPng Key Across Months',
+  'TinyPng API Key',
+];
+
 // Get configuration from ctx
 const getConfig = (ctx: IPicGo): IConfig => {
   return ctx.getConfig(PROJ_CONF) || ctx.getConfig(`picgo-plugin-${PROJ_CONF}`);
 };
 
+const getConfigData = (ctx: IPicGo) => {
+  const config = getConfig(ctx);
+  return {
+    compress: config[CONF_KEYS[0]] || CompressType.tinypng,
+    refresh: config[CONF_KEYS[1]] || false,
+    tinyKey: config[CONF_KEYS[2]] || null,
+  };
+};
+
 // Compression handler function
 const handle = async (ctx: IPicGo): Promise<IPicGo> => {
   // Get compression configuration
-  const config: IConfig = getConfig(ctx);
-  const compress = config?.compress;
-  const key = config?.key || config?.tinypngKey;
-  const refresh = config?.refreshAfterMonth;
+  // const config: IConfig = getConfig(ctx);
+  // const compress = config[CONF_KEYS[0]] || CompressType.tinypng;
+  // const refresh = config[CONF_KEYS[1]] || false;
+  // const tinyKey = config[CONF_KEYS[2]] || null;
+  const { compress, refresh, tinyKey } = getConfigData(ctx);
 
   // Log compression setting
   ctx.log.info('Compression type:', compress);
@@ -41,9 +58,13 @@ const handle = async (ctx: IPicGo): Promise<IPicGo> => {
           return ImageminCompress(ctx, { imageUrl });
         case CompressType.image2webp:
           return Image2WebPCompress(ctx, { imageUrl });
+        case CompressType.webp_converter:
+          return WebPConverterCompress(ctx, { imageUrl });
         case CompressType.tinypng:
         default:
-          return key ? TinyPngKeyCompress(ctx, { imageUrl, key }, refresh) : TinyPngCompress(ctx, { imageUrl });
+          return tinyKey
+            ? TinyPngKeyCompress(ctx, { imageUrl, key: tinyKey }, refresh)
+            : TinyPngCompress(ctx, { imageUrl });
       }
     }
     // Log unsupported format warning
@@ -80,9 +101,6 @@ const CompressTransformers: IPicGoPlugin = (ctx: IPicGo) => {
       ctx.helper.transformer.register(PROJ_CONF, { handle });
     },
     guiMenu(ctx: IPicGo) {
-      // Get compression key(s)
-      const config: IConfig = getConfig(ctx);
-      const key = config?.key || config?.tinypngKey;
       const success = (ctx: IPicGo, guiApi: any, info: string) => {
         ctx.log.success(info);
         guiApi.showNotification({
@@ -94,44 +112,45 @@ const CompressTransformers: IPicGoPlugin = (ctx: IPicGo) => {
         {
           label: 'Refresh active TinyPng API Keys',
           async handle(ctx, guiApi) {
-            await RefreshTinyPngConfig(ctx, { key }).then((info) => success(ctx, guiApi, info));
+            await RefreshTinyPngConfig(ctx).then((info) => success(ctx, guiApi, info));
           },
         },
         {
           label: 'Clear cache of TinyPng API Keys',
           async handle(ctx, guiApi) {
-            const info = await RefreshTinyPngConfig(ctx, { key }, true).then((info) => success(ctx, guiApi, info));
+            const info = await RefreshTinyPngConfig(ctx, true).then((info) => success(ctx, guiApi, info));
           },
         },
       ];
     },
     config(ctx: IPicGo): IPluginConfig[] {
-      let config: IConfig = getConfig(ctx);
+      // let config: IConfig = getConfig(ctx);
+      const { compress, refresh, tinyKey } = getConfigData(ctx);
 
       // input, confirm, password, list, checkbox
       return [
         {
-          name: 'compress',
+          name: CONF_KEYS[0],
           type: 'list',
           message: 'Choose compression library',
-          choices: Object.keys(CompressType),
-          default: config?.compress || CompressType.tinypng,
+          choices: Object.values(CompressType),
+          default: compress,
           required: true,
         },
         {
-          name: 'refreshAfterMonth',
+          name: CONF_KEYS[1],
           type: 'confirm',
-          default: false,
-          required: true,
+          default: refresh,
+          required: false,
           when(answer: any): boolean {
             return answer.compress === CompressType.tinypng;
           },
         },
         {
-          name: 'key',
+          name: CONF_KEYS[2],
           type: 'input',
           message: 'Enter API key(s). This is required if tinypng. Separate multiple keys with commas.',
-          default: config?.key || config?.tinypngKey || null,
+          default: tinyKey,
           required: false,
           when(answer: any): boolean {
             return answer.compress === CompressType.tinypng;
