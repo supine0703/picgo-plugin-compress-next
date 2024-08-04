@@ -6,6 +6,39 @@
 
 This is a fork of the  [picgo-plugin-compress-webp-lossless](https://github.com/mrgeneralgoo/picgo-plugin-compress-webp-lossless) repository, And it is a fork of the [picgo-plugin-compress](https://github.com/JuZiSang/picgo-plugin-compress) repository.
 
+
+### 🚀 Deployment and Use
+
+#### [PicGo-Core](https://github.com/PicGo/PicGo-Core) Install
+
+- Install `picgo add compress-next`.
+- Choose to use `picgo use transformer`.
+- Configuration `picgo config plugin compress-next`.
+
+
+#### [PicGo-Gui](https://github.com/Molunerfinn/PicGo) Install
+
+- Open the details window > Plug-in Settings > Search for `compress-next` to install, click on the lower right corner of the module to configure.
+- or, go to the 'picgo' directory 'npm i picgo-plugin-compress-next'.
+- Offline installation Reference [here](https://picgo.github.io/PicGo-Core-Doc/zh/dev-guide/deploy.html#gui%E6%8F%92%E4%BB%B6).
+
+
+#### Configuration
+- Compress Type (A detailed comparative analysis table will be made later):
+  - [tinypng](https://tinypng.com/): Damaged compression, need to upload to tinypng.
+  - [imagemin](https://github.com/imagemin/imagemin): Local lossy compression.
+  - image2webp: Local lossy compression to webp, support GIF lossy compression.
+  Note: Some beds (such as sm.ms) do not support webp image format and will fail to upload.
+  - [webp-converter](https://www.npmjs.com/package/webp-converter): Local lossy compression to webp, support GIF lossy compression, smaller size, faster.
+- Auto Refresh TinyPng Key Across Months:
+  - yes: The TinyPng API Key status is automatically refreshed if it is detected to be across months (different from the last time it was used).
+  - no: No detection, but still record the date.
+- TinyPng API Key:
+  - Apply in [developers](https://tinypng.com/developers).
+  - Separated by comma(`,`), multiple keys can be used to superimpose the usage times.
+
+
+
 # ⚗️ Background
 
 The [picgo-plugin-compress](https://github.com/JuZiSang/picgo-plugin-compress) has been a long time not updated, The key is in ` PicGo ` underlying upload library from ` request ` migrated to ` axios `, reference [PicGo/PicGo-Core#65](https://github.com/PicGo/PicGo-Core/issues/65), led to [TinyPng](https://tinypng.com/) is unavailable. Seems to be the last available version is [PicGo v2.3.0](https://github.com/Molunerfinn/PicGo/releases/tag/v2.3.0).  

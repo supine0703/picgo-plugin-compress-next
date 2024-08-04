@@ -7,6 +7,38 @@
 这是 [picgo-plugin-compress-webp-lossless](https://github.com/mrgeneralgoo/picgo-plugin-compress-webp-lossless) 的一个分支，同时它又是 [picgo-plugin-compress](https://github.com/JuZiSang/picgo-plugin-compress) 的分支
 
 
+### 🚀 部署使用
+
+#### [PicGo-Core](https://github.com/PicGo/PicGo-Core) 安装
+
+- 安装 `picgo add compress-next`
+- 选择使用 `picgo use transformer`
+- 参数配置 `picgo config plugin compress-next`
+
+
+#### [PicGo-Gui](https://github.com/Molunerfinn/PicGo) 安装
+
+- 打开详细窗口 > 插件设置 > 搜索 `compress-next` 即可安装，点击模块右下角配置参数
+- 或者，进入 `picgo` 目录 `npm i picgo-plugin-compress-next `
+- 离线安装参考[这里](https://picgo.github.io/PicGo-Core-Doc/zh/dev-guide/deploy.html#gui%E6%8F%92%E4%BB%B6)
+
+
+#### 参数配置
+- Compress Type (过段时间会制作详细对比分析表):
+  - [tinypng](https://tinypng.com/): 无损压缩，需要上传到 tinypng
+  - [imagemin](https://github.com/imagemin/imagemin): 本地有损压缩
+  - image2webp: 本地有损压缩为 webp，支持 GIF 格式有损压缩
+    注意：有些图床（比如 sm.ms）不支持 webp 图片格式，会上传失败
+  - [webp-converter](https://www.npmjs.com/package/webp-converter): 本地有损压缩为 webp，支持 GIF 格式有损压缩，体积更小，速度更快
+- Auto Refresh TinyPng Key Across Months:
+  - yes: 检测到跨月（与上次使用时年月不同）则自动刷新 TinyPng API Key 的状态
+  - no: 不检测，但是仍然记录年月
+- TinyPng API Key:
+  - 在 [developers](https://tinypng.com/developers) 中申请
+  - 逗号`,`隔开，可使用多个 Key 叠加使用次数
+
+
+
 # ⚗️ 背景
 
 [picgo-plugin-compress](https://github.com/JuZiSang/picgo-plugin-compress) 已经许久没有更新了，关键是在 `PicGo` 底层上传库从 `request` 迁移至 `axios` ，参考 [PicGo/PicGo-Core#65](https://github.com/PicGo/PicGo-Core/issues/65) ，导致 [TinyPng](https://tinypng.com/) 不可用。似乎最后一个可用版本是[PicGo v2.3.0](https://github.com/Molunerfinn/PicGo/releases/tag/v2.3.0)。  
