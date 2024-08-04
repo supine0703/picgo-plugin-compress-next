@@ -6,18 +6,12 @@ import { Image2WebPCompress } from './compress/image2webp';
 import { WebPConverterCompress } from './compress/webpConverter';
 import { CompressType } from './config';
 import { getUrlInfo } from './utils';
-import { IConfig } from './interface';
+import { IConfig, IConfigKeys } from './interface';
 import { SkipCompress } from './compress/skip';
 import { PROJ_CONF } from './config';
 
 // Allowed image file extensions
-const ALLOW_EXTNAME = ['.png', '.jpg', '.webp', '.jpeg'];
-
-const CONF_KEYS: ['Compress Type', 'Auto Refresh TinyPng Key Across Months', 'TinyPng API Key'] = [
-  'Compress Type',
-  'Auto Refresh TinyPng Key Across Months',
-  'TinyPng API Key',
-];
+const ALLOW_EXTNAME = ['.png', '.jpg', '.jpeg', '.webp'];
 
 // Get configuration from ctx
 const getConfig = (ctx: IPicGo): IConfig => {
@@ -25,21 +19,16 @@ const getConfig = (ctx: IPicGo): IConfig => {
 };
 
 const getConfigData = (ctx: IPicGo) => {
-  const config = getConfig(ctx);
+  const config: IConfig = getConfig(ctx);
   return {
-    compress: config[CONF_KEYS[0]] || CompressType.tinypng,
-    refresh: config[CONF_KEYS[1]] || false,
-    tinyKey: config[CONF_KEYS[2]] || null,
+    compress: config[IConfigKeys.A] || CompressType.tinypng,
+    refresh: config[IConfigKeys.B] || false,
+    tinyKey: config[IConfigKeys.C] || null,
   };
 };
 
 // Compression handler function
 const handle = async (ctx: IPicGo): Promise<IPicGo> => {
-  // Get compression configuration
-  // const config: IConfig = getConfig(ctx);
-  // const compress = config[CONF_KEYS[0]] || CompressType.tinypng;
-  // const refresh = config[CONF_KEYS[1]] || false;
-  // const tinyKey = config[CONF_KEYS[2]] || null;
   const { compress, refresh, tinyKey } = getConfigData(ctx);
 
   // Log compression setting
@@ -124,13 +113,12 @@ const CompressTransformers: IPicGoPlugin = (ctx: IPicGo) => {
       ];
     },
     config(ctx: IPicGo): IPluginConfig[] {
-      // let config: IConfig = getConfig(ctx);
       const { compress, refresh, tinyKey } = getConfigData(ctx);
 
       // input, confirm, password, list, checkbox
       return [
         {
-          name: CONF_KEYS[0],
+          name: IConfigKeys.A,
           type: 'list',
           message: 'Choose compression library',
           choices: Object.values(CompressType),
@@ -138,7 +126,7 @@ const CompressTransformers: IPicGoPlugin = (ctx: IPicGo) => {
           required: true,
         },
         {
-          name: CONF_KEYS[1],
+          name: IConfigKeys.B,
           type: 'confirm',
           default: refresh,
           required: false,
@@ -147,7 +135,7 @@ const CompressTransformers: IPicGoPlugin = (ctx: IPicGo) => {
           },
         },
         {
-          name: CONF_KEYS[2],
+          name: IConfigKeys.C,
           type: 'input',
           message: 'Enter API key(s). This is required if tinypng. Separate multiple keys with commas.',
           default: tinyKey,

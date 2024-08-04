@@ -12,7 +12,13 @@ export interface CommonParams {
 
 export interface IConfig {
   nameType: string;
-  'Compress Type': string;
-  'Auto Refresh TinyPng Key Across Months': boolean;
-  'TinyPng API Key': string;
+  [IConfigKeys.A]: string;
+  [IConfigKeys.B]: boolean;
+  [IConfigKeys.C]: string;
+}
+
+export enum IConfigKeys {
+  A = 'Compress Type',
+  B = 'Auto Refresh TinyPng Key Across Months',
+  C = 'TinyPng API Key',
 }
