@@ -85,6 +85,36 @@
       需要删除相应配置文件，才可重置
     </td>
   </tr>
+  <tr>
+    <th rowspan=1>imagemin</th>
+    <td>✅</td>
+    <td>支持本地有损转换</td>
+    <td>✅</td>
+    <td>支持本地有损转换</td>
+  </tr>
+  <tr>
+    <th rowspan=2>imagemin2webp</th>
+    <td>✅</td>
+    <td>支持本地有损转换</td>
+    <td>✅</td>
+    <td>支持本地有损转换</td>
+  </tr>
+  <tr>
+    <td>✅</td>
+    <td>支持 gif 转 webp</td>
+    <td>❌</td>
+    <td>不支持 gif 转 webp</td>
+  </tr>
+  <tr>
+    <th rowspan=1>webp-converter</th>
+    <td>✅</td>
+    <td>
+      jpeg, png, webp 压缩为 webp<br>
+      支持 gif 压缩为 webp
+    </td>
+    <td>❌</td>
+    <td>不支持使用 webp-converter</td>
+  </tr>
   <!-- <tr>
     <td>✅</td>
     <td></td>
@@ -104,7 +134,9 @@
   - [x] 刷新有效 `Key`
   - [x] 刷新所有 `Key`
   - [x] 跨越份自动刷新有效 `Key`
-- [ ] 加入 `webp-converter` (更小的体积)
+- [x] 加入 `webp-converter` (更小的体积和更快的速度)
+- [ ] 加入 `gift 2 webp` 的能力 (imagemin2webp & webp-converter) (测试中)
+
 
 # 报告问题
 

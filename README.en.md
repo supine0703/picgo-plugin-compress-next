@@ -84,6 +84,36 @@ So there is ***`picgo-plugin-compress-next`*** birth 🎉
       The configuration file can be reset only after it is deleted
     </td>
   </tr>
+  <tr>
+    <th rowspan=1>imagemin</th>
+    <td>✅</td>
+    <td>Support for local lossy conversion</td>
+    <td>✅</td>
+    <td>Support for local lossy conversion</td>
+  </tr>
+  <tr>
+    <th rowspan=2>imagemin2webp</th>
+    <td>✅</td>
+    <td>Support for local lossy conversion</td>
+    <td>✅</td>
+    <td>Support for local lossy conversion</td>
+  </tr>
+  <tr>
+    <td>✅</td>
+    <td>Support gif to webp</td>
+    <td>❌</td>
+    <td>Conversion from gif to webp is not supported</td>
+  </tr>
+  <tr>
+    <th rowspan=1>webp-converter</th>
+    <td>✅</td>
+    <td>
+      jpeg, png, webp compressed to webp<br>
+      Support gif compression to webp
+    </td>
+    <td>❌</td>
+    <td>Cannot use webp-converter</td>
+  </tr>
   <!-- <tr>
     <td>✅</td>
     <td></td>
@@ -103,7 +133,8 @@ So there is ***`picgo-plugin-compress-next`*** birth 🎉
   - [x] Refreshing of `valid keys`
   - [x] Refreshing of `all keys`
   - [x] `Automatically` refresh `valid keys` if across months
-- [ ] add `webp-converter` (Smaller volume)
+- [x] add `webp-converter` (Smaller volume and Higher speed)
+- [ ] Add ability of `gift 2 webp`  (imagemin2webp & webp-converter) (under test)
 
 
 # Reporting Issues  
