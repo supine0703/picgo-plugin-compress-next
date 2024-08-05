@@ -185,9 +185,9 @@ So there is ***`picgo-plugin-compress-next`*** birth 🎉
   - [x] Refreshing of `all keys`
   - [x] `Automatically` refresh `valid keys` if across months
 - [x] add `webp-converter` (Smaller volume and Higher speed)
-- [ ] Add ability of `gift 2 webp`
+- [x] Add ability of `gift 2 webp`
   - [x] Use `webp-converter`'s `gwebp`
-  - [ ] `imagemin-gif2webp`
+  - [x] `imagemin-gif2webp`
 
 
 # Reporting Issues  

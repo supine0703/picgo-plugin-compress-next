@@ -185,9 +185,9 @@
   - [x] 刷新所有 `Key`
   - [x] 跨越份自动刷新有效 `Key`
 - [x] 加入 `webp-converter` (更小的体积和更快的速度)
-- [ ] 加入 `gift 2 webp` 的能力
+- [x] 加入 `gift 2 webp` 的能力
   - [x] 使用 `webp-converter` 的 `gwebp` 
-  - [ ] `imagemin-gif2webp`
+  - [x] `imagemin-gif2webp`
 
 
 # 报告问题
