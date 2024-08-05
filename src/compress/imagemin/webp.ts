@@ -5,7 +5,7 @@ import { getImageBuffer, getImageInfo } from '../../utils';
 import { IPicGo } from 'picgo';
 
 /**
- * Compresses an image to WebP format using imagemin-webp plugin.
+ * Compresses an image to WebP format using imagemin-gif2webp plugin.
  * @param ctx The PicGo instance.
  * @param imageUrl The URL of the image to be compressed.
  * @returns A Promise that resolves to an ImageInfo object containing information about the compressed image.

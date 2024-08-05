@@ -1,7 +1,7 @@
 import { IPicGo, IPlugin, IPluginConfig, IPicGoPlugin } from 'picgo';
 import { TinyPngCompress } from './compress/tinypngweb';
 import { TinyPngKeyCompress, RefreshTinyPngConfig } from './compress/tinypng';
-import { ImageminCompress, ImageminWebpCompress } from './compress/imagemin';
+import { ImageminCompress, ImageminWebpCompress, ImageminGif2WebPCompress } from './compress/imagemin';
 import { WebPConverterCWebP, WebPConverterGWebP } from './compress/webp-converter';
 import { CompressType, GifCompressType } from './config';
 import { getUrlInfo } from './utils';
@@ -59,9 +59,9 @@ const handle = async (ctx: IPicGo): Promise<IPicGo> => {
             : TinyPngCompress(ctx, { imageUrl });
       }
     } else if (extname === GIF_EXTNAME) {
-      switch (compress) {
+      switch (gifCompress) {
         case GifCompressType.B:
-          // return ImageminWebpCompress(ctx, { imageUrl });
+          return ImageminGif2WebPCompress(ctx, { imageUrl });
         case GifCompressType.A:
         default:
           return WebPConverterGWebP(ctx, { imageUrl });

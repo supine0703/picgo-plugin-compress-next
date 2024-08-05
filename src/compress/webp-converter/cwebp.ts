@@ -5,6 +5,12 @@ import { IPicGo } from 'picgo';
 import { cwebp } from 'webp-converter';
 import { extname } from 'path';
 
+/**
+ * Compresses an image to WebP format using cwebp from webp-converter plugin.
+ * @param ctx The PicGo instance.
+ * @param imageUrl The URL of the image to be compressed.
+ * @returns A Promise that resolves to an ImageInfo object containing information about the compressed image.
+ */
 export function CWebP(ctx: IPicGo, { imageUrl }: CommonParams): Promise<ImageInfo> {
   ctx.log.info('The webp-converter compression started');
 

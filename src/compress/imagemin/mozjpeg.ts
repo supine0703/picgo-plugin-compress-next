@@ -12,12 +12,12 @@ import { getImageBuffer, getImageInfo } from '../../utils';
  * @returns A Promise that resolves to an ImageInfo object containing information about the compressed image.
  */
 export function Image(ctx: IPicGo, { imageUrl }: CommonParams): Promise<ImageInfo> {
-  ctx.log.info('The imagemin compression started');
+  ctx.log.info('The imagemin-mozjpeg compression started');
 
   return getImageBuffer(ctx, imageUrl)
     .then((buffer) => imagemin.buffer(buffer, { plugins: [mozjpeg({ quality: 75, progressive: true }), upng()] }))
     .then((buffer) => {
-      ctx.log.info('The imagemin compression successful');
+      ctx.log.info('The imagemin-mozjpeg compression successful');
       return getImageInfo(imageUrl, buffer);
     });
 }
