@@ -11,24 +11,8 @@ declare module 'imagemin-gif2webp' {
 }
 
 declare module 'webp-converter' {
-  export function buffer2webpbuffer(
-    buffer: Buffer,
-    image_type: string,
-    option: string,
-    extra_path?: string,
-  ): Promise<Buffer>;
-
-  export function cwebp(
-    input_image: string,
-    output_image: string,
-    option: string,
-    logging:string ='-quiet'
-  ): Promise<any>;
-
-  export function gwebp(
-    input_image: string,
-    output_image: string,
-    option: string,
-    logging:string ='-quiet'
-  ): Promise<any>;
+  export type ToWebP = (input_image: string, output_image: string, option: string, logging?: string) => Promise<any>;
+  
+  export const cwebp: ToWebP;
+  export const gwebp: ToWebP;
 }

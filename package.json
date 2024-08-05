@@ -40,6 +40,8 @@
     "typescript": "^5.4.5"
   },
   "dependencies": {
+    "@types/uuid": "^10.0.0",
+    "uuid": "^10.0.0",
     "crypto-js": "^4.2.0",
     "fs-extra": "^11.2.0",
     "image-size": "^1.1.1",
