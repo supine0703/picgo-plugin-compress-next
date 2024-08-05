@@ -4,7 +4,7 @@ import { TinyPngKeyCompress, RefreshTinyPngConfig } from './compress/tinypng';
 import { ImageminCompress, ImageminWebpCompress, ImageminGif2WebPCompress } from './compress/imagemin';
 import { WebPConverterCWebP, WebPConverterGWebP } from './compress/webp-converter';
 import { CompressType, GifCompressType } from './config';
-import { getUrlInfo } from './utils';
+import { getUrlInfo, logExecutionTime } from './utils';
 import { IConfig, IConfigKeys } from './interface';
 import { SkipCompress } from './compress/skip';
 import { PROJ_CONF } from './config';
@@ -43,33 +43,41 @@ const handle = async (ctx: IPicGo): Promise<IPicGo> => {
     const info = getUrlInfo(imageUrl);
     // Log image information
     ctx.log.info('Image info:', JSON.stringify(info));
-    const extname = info.extname.toLowerCase();
-    if (ALLOW_EXTNAME.includes(extname)) {
-      switch (compress) {
-        case CompressType.B:
-          return ImageminCompress(ctx, { imageUrl });
-        case CompressType.C:
-          return ImageminWebpCompress(ctx, { imageUrl });
-        case CompressType.D:
-          return WebPConverterCWebP(ctx, { imageUrl });
-        case CompressType.A:
-        default:
-          return tinyKey
-            ? TinyPngKeyCompress(ctx, { imageUrl, key: tinyKey }, refresh)
-            : TinyPngCompress(ctx, { imageUrl });
-      }
-    } else if (extname === GIF_EXTNAME) {
-      switch (gifCompress) {
-        case GifCompressType.B:
-          return ImageminGif2WebPCompress(ctx, { imageUrl });
-        case GifCompressType.A:
-        default:
-          return WebPConverterGWebP(ctx, { imageUrl });
-      }
-    }
-    // Log unsupported format warning
-    ctx.log.warn('Unsupported image format. Skipping compression.');
-    return SkipCompress(ctx, { imageUrl });
+
+    // Log compress time
+    return logExecutionTime(
+      (info: string) => ctx.log.info(info),
+      'Compress',
+      () => {
+        const extname = info.extname.toLowerCase();
+        if (ALLOW_EXTNAME.includes(extname)) {
+          switch (compress) {
+            case CompressType.B:
+              return ImageminCompress(ctx, { imageUrl });
+            case CompressType.C:
+              return ImageminWebpCompress(ctx, { imageUrl });
+            case CompressType.D:
+              return WebPConverterCWebP(ctx, { imageUrl });
+            case CompressType.A:
+            default:
+              return tinyKey
+                ? TinyPngKeyCompress(ctx, { imageUrl, key: tinyKey }, refresh)
+                : TinyPngCompress(ctx, { imageUrl });
+          }
+        } else if (extname === GIF_EXTNAME) {
+          switch (gifCompress) {
+            case GifCompressType.B:
+              return ImageminGif2WebPCompress(ctx, { imageUrl });
+            case GifCompressType.A:
+            default:
+              return WebPConverterGWebP(ctx, { imageUrl });
+          }
+        }
+        // Log unsupported format warning
+        ctx.log.warn('Unsupported image format. Skipping compression.');
+        return SkipCompress(ctx, { imageUrl });
+      },
+    );
   });
 
   return Promise.all(tasks).then((output) => {

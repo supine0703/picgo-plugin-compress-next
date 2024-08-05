@@ -57,3 +57,12 @@ export function getUrlInfo(imageUrl: string) {
     extname: extname(imageUrl),
   };
 }
+
+// Log execution time
+export function logExecutionTime<T>(log: (info: string) => void, what: string, fn: () => T): T {
+  const start = performance.now();
+  const result = fn();
+  const end = performance.now();
+  log(`${what} Time: ${(end - start).toFixed(2)}ms`);
+  return result;
+}
