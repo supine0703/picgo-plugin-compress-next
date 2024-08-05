@@ -27,9 +27,12 @@ This is a fork of the  [picgo-plugin-compress-webp-lossless](https://github.com/
 - Compress Type (A detailed comparative analysis table will be made later):
   - [tinypng](https://tinypng.com/): Damaged compression, need to upload to tinypng.
   - [imagemin](https://github.com/imagemin/imagemin): Local lossy compression.
-  - image2webp: Local lossy compression to webp, support GIF lossy compression.
+  - imagemin-webp: Local lossy compression to webp, support GIF lossy compression.
   Note: Some beds (such as sm.ms) do not support webp image format and will fail to upload.
   - [webp-converter](https://www.npmjs.com/package/webp-converter): Local lossy compression to webp, support GIF lossy compression, smaller size, faster.
+- Gif Compress Type:
+  - webp-converter: Local lossy compresses gif to webp.
+  - imagemin-gif2webp: 
 - Auto Refresh TinyPng Key Across Months:
   - yes: The TinyPng API Key status is automatically refreshed if it is detected to be across months (different from the last time it was used).
   - no: No detection, but still record the date.
@@ -113,39 +116,54 @@ So there is ***`picgo-plugin-compress-next`*** birth 🎉
     </td>
     <td>❌</td>
     <td>
-      If the valid Key reaches the number of times used, no access <br>
+      If the valid Key reaches the number of times, the access is stopped<br>
       The configuration file can be reset only after it is deleted
     </td>
   </tr>
   <tr>
-    <th rowspan=1>imagemin</th>
+    <th rowspan=3>imagemin</th>
     <td>✅</td>
-    <td>Support for local lossy conversion</td>
+    <td>
+      <b>mozjpeg</b>:<br>
+      Support for local lossy conversion
+    </td>
     <td>✅</td>
-    <td>Support for local lossy conversion</td>
+    <td>
+      <b>mozjpeg</b>:<br>
+      Support for local lossy conversion
+    </td>
   </tr>
   <tr>
-    <th rowspan=2>imagemin2webp</th>
     <td>✅</td>
-    <td>Support for local lossy conversion</td>
+    <td>
+      <b>imagemin-webp</b>:<br>
+      Supports local lossy conversion to <b>webp</b>
+    </td>
     <td>✅</td>
-    <td>Support for local lossy conversion</td>
+    <td>
+      <b>imagemin-webp</b>:<br>
+      Supports local lossy conversion to <b>webp</b>
+    </td>
   </tr>
   <tr>
     <td>✅</td>
-    <td>Support gif to webp</td>
+    <td>
+      <b>imagemin-gif2webp</b>:<br>
+      Supports <b>gif</b> local lossy conversion to <b>webp</b>
+    </td>
     <td>❌</td>
     <td>Conversion from gif to webp is not supported</td>
   </tr>
   <tr>
-    <th rowspan=1>webp-converter</th>
+    <th rowspan=2>webp-converter</th>
     <td>✅</td>
-    <td>
-      jpeg, png, webp compressed to webp<br>
-      Support gif compression to webp
-    </td>
-    <td>❌</td>
-    <td>Cannot use webp-converter</td>
+    <td>jpeg, png, webp compressed to webp</td>
+    <td rowspan=2>❌</td>
+    <td rowspan=2>Cannot use webp-converter</td>
+  </tr>
+  <tr>
+    <td>✅</td>
+    <td>Support gif compression to webp</td>
   </tr>
   <!-- <tr>
     <td>✅</td>
@@ -167,27 +185,12 @@ So there is ***`picgo-plugin-compress-next`*** birth 🎉
   - [x] Refreshing of `all keys`
   - [x] `Automatically` refresh `valid keys` if across months
 - [x] add `webp-converter` (Smaller volume and Higher speed)
-- [ ] Add ability of `gift 2 webp`  (imagemin2webp & webp-converter) (under test)
+- [ ] Add ability of `gift 2 webp`
+  - [x] Use `webp-converter`'s `gwebp`
+  - [ ] `imagemin-gif2webp`
 
 
 # Reporting Issues  
 
 [You can click here directly to create an issue](https://github.com/supine0703/picgo-plugin-compress-next/issues/new)
 
-
-
-<!-- # Picgo Plugin Compress Webp Lossless
-
-The original project has been inactive for quite some time. It's intended to provide continued maintenance and support.
-
-This project is a plugin for [PicGo](https://github.com/Molunerfinn/PicGo) and [PicGo-Core](https://github.com/PicGo/PicGo-Core), enabling image compression using the remote service provided by [TinyPNG](https://tinypng.com/) or local compression using [imagemin](https://github.com/imagemin/imagemin).
-
-Additionally, it supports lossless converting images to the WebP format.
-
-Several enhancements and updates have been implemented in this fork:
-
-- **Dependency Upgrades**: The project dependencies have been updated to their latest versions, ensuring better compression efficiency.
-- **Syntax Upgrade**: The codebase has been migrated to use ES modules, providing better compatibility with modern JavaScript ecosystems.
-- **Lossless Compression**: Local image compression has been improved to offer lossless compression, resulting in better compression quality.
-
-Feel free to contribute to this project or report any issues you encounter. Your feedback and contributions are greatly appreciated! -->

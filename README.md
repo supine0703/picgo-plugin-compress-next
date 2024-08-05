@@ -27,9 +27,12 @@
 - Compress Type (过段时间会制作详细对比分析表):
   - [tinypng](https://tinypng.com/): 无损压缩，需要上传到 tinypng
   - [imagemin](https://github.com/imagemin/imagemin): 本地有损压缩
-  - image2webp: 本地有损压缩为 webp，支持 GIF 格式有损压缩
+  - imagemin-webp: 本地有损压缩为 webp，支持 GIF 格式有损压缩
     注意：有些图床（比如 sm.ms）不支持 webp 图片格式，会上传失败
   - [webp-converter](https://www.npmjs.com/package/webp-converter): 本地有损压缩为 webp，支持 GIF 格式有损压缩，体积更小，速度更快
+- Gif Compress Type:
+  - webp-converter: 本地有损将 gif 压缩为 webp
+  - imagemin-gif2webp: 
 - Auto Refresh TinyPng Key Across Months:
   - yes: 检测到跨月（与上次使用时年月不同）则自动刷新 TinyPng API Key 的状态
   - no: 不检测，但是仍然记录年月
@@ -113,39 +116,54 @@
     </td>
     <td>❌</td>
     <td>
-      若有效 Key 达到使用次数，则不在访问<br>
+      若有效 Key 达到使用次数，则不再访问<br>
       需要删除相应配置文件，才可重置
     </td>
   </tr>
   <tr>
-    <th rowspan=1>imagemin</th>
+    <th rowspan=3>imagemin</th>
     <td>✅</td>
-    <td>支持本地有损转换</td>
+    <td>
+      <b>mozjpeg</b>:<br>
+      支持本地有损压缩
+    </td>
     <td>✅</td>
-    <td>支持本地有损转换</td>
+    <td>
+      <b>mozjpeg</b>:<br>
+      支持本地有损压缩
+    </td>
   </tr>
   <tr>
-    <th rowspan=2>imagemin2webp</th>
     <td>✅</td>
-    <td>支持本地有损转换</td>
+    <td>
+      <b>imagemin-webp</b>:<br>
+      支持本地有损转换为 <b>webp</b>
+    </td>
     <td>✅</td>
-    <td>支持本地有损转换</td>
+    <td>
+      <b>imagemin-webp</b>:<br>
+      支持本地有损转换为 <b>webp</b>
+    </td>
   </tr>
   <tr>
     <td>✅</td>
-    <td>支持 gif 转 webp</td>
+    <td>
+      <b>imagemin-gif2webp</b>:<br>
+      支持 <b>gif</b> 本地有损转换为 <b>webp</b>
+    </td>
     <td>❌</td>
     <td>不支持 gif 转 webp</td>
   </tr>
   <tr>
-    <th rowspan=1>webp-converter</th>
+    <th rowspan=2>webp-converter</th>
     <td>✅</td>
-    <td>
-      jpeg, png, webp 压缩为 webp<br>
-      支持 gif 压缩为 webp
-    </td>
-    <td>❌</td>
-    <td>不支持使用 webp-converter</td>
+    <td>jpeg, png, webp 压缩为 <b>webp</b></td>
+    <td rowspan=2>❌</td>
+    <td rowspan=2>不支持使用 webp-converter</td>
+  </tr>
+  <tr>
+    <td>✅</td>
+    <td>支持 gif 压缩为 <b>webp</b></td>
   </tr>
   <!-- <tr>
     <td>✅</td>
@@ -167,7 +185,9 @@
   - [x] 刷新所有 `Key`
   - [x] 跨越份自动刷新有效 `Key`
 - [x] 加入 `webp-converter` (更小的体积和更快的速度)
-- [ ] 加入 `gift 2 webp` 的能力 (imagemin2webp & webp-converter) (测试中)
+- [ ] 加入 `gift 2 webp` 的能力
+  - [x] 使用 `webp-converter` 的 `gwebp` 
+  - [ ] `imagemin-gif2webp`
 
 
 # 报告问题
