@@ -2,7 +2,7 @@ import { IPicGo, IPlugin, IPluginConfig, IPicGoPlugin } from 'picgo';
 import { TinyPngCompress } from './compress/tinypngweb';
 import { TinyPngKeyCompress, RefreshTinyPngConfig } from './compress/tinypng';
 import { ImageminCompress, ImageminWebpCompress } from './compress/imagemin';
-import { WebPConverterCWebP } from './compress/webp-converter';
+import { WebPConverterCWebP, WebPConverterGWebP } from './compress/webp-converter';
 import { CompressType, GifCompressType } from './config';
 import { getUrlInfo } from './utils';
 import { IConfig, IConfigKeys } from './interface';
@@ -22,7 +22,7 @@ const getConfigData = (ctx: IPicGo) => {
   const config: IConfig = getConfig(ctx);
   return {
     compress: config[IConfigKeys.A] || CompressType.A,
-    gifCompress: config[IConfigKeys.B] || GifCompressType.B,
+    gifCompress: config[IConfigKeys.B] || GifCompressType.A,
     refresh: config[IConfigKeys.G] || false,
     tinyKey: config[IConfigKeys.H] || null,
   };
@@ -61,10 +61,10 @@ const handle = async (ctx: IPicGo): Promise<IPicGo> => {
     } else if (extname === GIF_EXTNAME) {
       switch (compress) {
         case GifCompressType.B:
-          return ImageminWebpCompress(ctx, { imageUrl });
+          // return ImageminWebpCompress(ctx, { imageUrl });
         case GifCompressType.A:
         default:
-          return WebPConverterCWebP(ctx, { imageUrl });
+          return WebPConverterGWebP(ctx, { imageUrl });
       }
     }
     // Log unsupported format warning

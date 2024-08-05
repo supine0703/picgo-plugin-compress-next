@@ -18,10 +18,17 @@ declare module 'webp-converter' {
     extra_path?: string,
   ): Promise<Buffer>;
 
+  export function cwebp(
+    input_image: string,
+    output_image: string,
+    option: string,
+    logging:string ='-quiet'
+  ): Promise<any>;
+
   export function gwebp(
     input_image: string,
     output_image: string,
     option: string,
     logging:string ='-quiet'
-  ): Promise<string>;
+  ): Promise<any>;
 }
