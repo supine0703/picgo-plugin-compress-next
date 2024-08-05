@@ -84,7 +84,7 @@ describe('CompressTransformers', () => {
       expect(config[0].name).toBe('compress');
       expect(config[0].type).toBe('list');
       expect(config[0].choices).toEqual(Object.keys(CompressType));
-      expect(config[0].default).toBe(CompressType.tinypng);
+      expect(config[0].default).toBe(CompressType.A);
       expect(config[1].name).toBe('key');
       expect(config[1].type).toBe('input');
       expect(config[1].default).toBe(null);

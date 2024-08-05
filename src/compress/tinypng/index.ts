@@ -37,7 +37,7 @@ export function TinyPngKeyCompress(
  * @param clear A boolean indicating whether to clear the key.
  */
 export function RefreshTinyPngConfig(ctx: IPicGo, clear: boolean = false): Promise<string> {
-  return TinyPng.init({ ctx, keys:[] }).then(() => {
+  return TinyPng.init({ ctx, keys: [] }).then(() => {
     return TinyPng.refresh(clear);
   });
 }

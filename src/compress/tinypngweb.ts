@@ -15,7 +15,7 @@ export function TinyPngCompress(ctx: IPicGo, { imageUrl }: CommonParams): Promis
    * @author: 李宗霖 <email: supine0703@outlook.com> or <github: https://github.com/supine0703>
    */
   throw new Error('Please set the TinyPNG API Key. TinyPngWeb is cannot use, maybe you can try?');
-  
+
   return getImageBuffer(ctx, imageUrl).then((buffer) => {
     ctx.log.info('TinyPngWeb compression started');
     return ctx
