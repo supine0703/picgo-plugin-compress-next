@@ -17,4 +17,11 @@ declare module 'webp-converter' {
     option: string,
     extra_path?: string,
   ): Promise<Buffer>;
+
+  export function gwebp(
+    input_image: string,
+    output_image: string,
+    option: string,
+    logging:string ='-quiet'
+  ): Promise<string>;
 }

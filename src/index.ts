@@ -1,10 +1,9 @@
 import { IPicGo, IPlugin, IPluginConfig, IPicGoPlugin } from 'picgo';
 import { TinyPngCompress } from './compress/tinypngweb';
-import { TinyPngKeyCompress, RefreshTinyPngConfig } from './compress/tinypng/index';
-import { ImageminCompress } from './compress/imagemin';
-import { Image2WebPCompress } from './compress/image2webp';
-import { WebPConverterCompress } from './compress/webpConverter';
-import { CompressType } from './config';
+import { TinyPngKeyCompress, RefreshTinyPngConfig } from './compress/tinypng';
+import { ImageminCompress, ImageminWebpCompress } from './compress/imagemin';
+import { WebPConverterCWebP } from './compress/webp-converter';
+import { CompressType, GifCompressType } from './config';
 import { getUrlInfo } from './utils';
 import { IConfig, IConfigKeys } from './interface';
 import { SkipCompress } from './compress/skip';
@@ -12,6 +11,7 @@ import { PROJ_CONF } from './config';
 
 // Allowed image file extensions
 const ALLOW_EXTNAME = ['.png', '.jpg', '.jpeg', '.webp'];
+const GIF_EXTNAME = '.gif';
 
 // Get configuration from ctx
 const getConfig = (ctx: IPicGo): IConfig => {
@@ -21,18 +21,20 @@ const getConfig = (ctx: IPicGo): IConfig => {
 const getConfigData = (ctx: IPicGo) => {
   const config: IConfig = getConfig(ctx);
   return {
-    compress: config[IConfigKeys.A] || CompressType.tinypng,
-    refresh: config[IConfigKeys.B] || false,
-    tinyKey: config[IConfigKeys.C] || null,
+    compress: config[IConfigKeys.A] || CompressType.A,
+    gifCompress: config[IConfigKeys.B] || GifCompressType.B,
+    refresh: config[IConfigKeys.G] || false,
+    tinyKey: config[IConfigKeys.H] || null,
   };
 };
 
 // Compression handler function
 const handle = async (ctx: IPicGo): Promise<IPicGo> => {
-  const { compress, refresh, tinyKey } = getConfigData(ctx);
+  const { compress, gifCompress, refresh, tinyKey } = getConfigData(ctx);
 
   // Log compression setting
   ctx.log.info('Compression type:', compress);
+  ctx.log.info('Gif compression type:', gifCompress);
 
   // Process images
   const tasks = ctx.input.map((imageUrl) => {
@@ -41,19 +43,28 @@ const handle = async (ctx: IPicGo): Promise<IPicGo> => {
     const info = getUrlInfo(imageUrl);
     // Log image information
     ctx.log.info('Image info:', JSON.stringify(info));
-    if (ALLOW_EXTNAME.includes(info.extname.toLowerCase())) {
+    const extname = info.extname.toLowerCase();
+    if (ALLOW_EXTNAME.includes(extname)) {
       switch (compress) {
-        case CompressType.imagemin:
+        case CompressType.B:
           return ImageminCompress(ctx, { imageUrl });
-        case CompressType.image2webp:
-          return Image2WebPCompress(ctx, { imageUrl });
-        case CompressType.webp_converter:
-          return WebPConverterCompress(ctx, { imageUrl });
-        case CompressType.tinypng:
+        case CompressType.C:
+          return ImageminWebpCompress(ctx, { imageUrl });
+        case CompressType.D:
+          return WebPConverterCWebP(ctx, { imageUrl });
+        case CompressType.A:
         default:
           return tinyKey
             ? TinyPngKeyCompress(ctx, { imageUrl, key: tinyKey }, refresh)
             : TinyPngCompress(ctx, { imageUrl });
+      }
+    } else if (extname === GIF_EXTNAME) {
+      switch (compress) {
+        case GifCompressType.B:
+          return ImageminWebpCompress(ctx, { imageUrl });
+        case GifCompressType.A:
+        default:
+          return WebPConverterCWebP(ctx, { imageUrl });
       }
     }
     // Log unsupported format warning
@@ -107,13 +118,13 @@ const CompressTransformers: IPicGoPlugin = (ctx: IPicGo) => {
         {
           label: 'Clear cache of TinyPng API Keys',
           async handle(ctx, guiApi) {
-            const info = await RefreshTinyPngConfig(ctx, true).then((info) => success(ctx, guiApi, info));
+            await RefreshTinyPngConfig(ctx, true).then((info) => success(ctx, guiApi, info));
           },
         },
       ];
     },
     config(ctx: IPicGo): IPluginConfig[] {
-      const { compress, refresh, tinyKey } = getConfigData(ctx);
+      const { compress, gifCompress, refresh, tinyKey } = getConfigData(ctx);
 
       // input, confirm, password, list, checkbox
       return [
@@ -127,21 +138,29 @@ const CompressTransformers: IPicGoPlugin = (ctx: IPicGo) => {
         },
         {
           name: IConfigKeys.B,
+          type: 'list',
+          message: 'Choose gif compression library',
+          choices: Object.values(GifCompressType),
+          default: gifCompress,
+          required: true,
+        },
+        {
+          name: IConfigKeys.G,
           type: 'confirm',
           default: refresh,
           required: false,
           when(answer: any): boolean {
-            return answer.compress === CompressType.tinypng;
+            return answer.compress === CompressType.A;
           },
         },
         {
-          name: IConfigKeys.C,
+          name: IConfigKeys.H,
           type: 'input',
           message: 'Enter API key(s). This is required if tinypng. Separate multiple keys with commas.',
           default: tinyKey,
           required: false,
           when(answer: any): boolean {
-            return answer.compress === CompressType.tinypng;
+            return answer.compress === CompressType.A;
           },
         },
       ];

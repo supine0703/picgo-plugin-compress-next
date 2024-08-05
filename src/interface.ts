@@ -13,12 +13,16 @@ export interface CommonParams {
 export interface IConfig {
   nameType: string;
   [IConfigKeys.A]: string;
-  [IConfigKeys.B]: boolean;
-  [IConfigKeys.C]: string;
+  [IConfigKeys.B]: string;
+  [IConfigKeys.G]: boolean;
+  [IConfigKeys.H]: string;
 }
 
 export enum IConfigKeys {
+  // required
   A = 'Compress Type',
-  B = 'Auto Refresh TinyPng Key Across Months',
-  C = 'TinyPng API Key',
+  B = 'Gif compress Type',
+  // optional
+  G = 'Auto Refresh TinyPng Key Across Months',
+  H = 'TinyPng API Key',
 }
