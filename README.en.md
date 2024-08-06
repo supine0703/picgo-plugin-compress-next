@@ -26,19 +26,24 @@ This is a fork of the  [picgo-plugin-compress-webp-lossless](https://github.com/
 #### Configuration
 - Compress Type (A detailed comparative analysis table will be made later):
   - [tinypng](https://tinypng.com/): Damaged compression, need to upload to tinypng.
-  - [imagemin](https://github.com/imagemin/imagemin): Local lossy compression.
-  - imagemin-webp: Local lossy compression to webp, support GIF lossy compression.
+  - [imagemin](https://github.com/imagemin/imagemin): Image compression does not change the suffix, support `jpeg` and `png`. Use [mozjpeg](https://www.npmjs.com/package/imagemin-mozjpeg) and [upng](https://www.npmjs.com/package/imagemin-upng).
+  - [imagemin-webp](https://www.npmjs.com/package/imagemin-webp): Local compression to webp.
   Note: Some beds (such as sm.ms) do not support webp image format and will fail to upload.
-  - [webp-converter](https://www.npmjs.com/package/webp-converter): Local lossy compression to webp, support GIF lossy compression, smaller size, faster.
+  - [webp-converter](https://www.npmjs.com/package/webp-converter): Same as the last one.
 - Gif Compress Type:
-  - webp-converter: Local lossy compresses gif to webp.
-  - imagemin-gif2webp: 
+  - [webp-converter](https://www.npmjs.com/package/webp-converter): Local lossy compresses gif to webp.
+  - [imagemin-gif2webp](https://www.npmjs.com/package/imagemin-gif2webp): 
 - Auto Refresh TinyPng Key Across Months:
   - yes: The TinyPng API Key status is automatically refreshed if it is detected to be across months (different from the last time it was used).
   - no: No detection, but still record the date.
 - TinyPng API Key:
   - Apply in [developers](https://tinypng.com/developers).
   - Separated by comma(`,`), multiple keys can be used to superimpose the usage times.
+
+
+##### Compression parameter configuration
+
+Go to see [option.example.json](./docs/option.example.json)
 
 
 
@@ -67,7 +72,7 @@ So there is ***`picgo-plugin-compress-next`*** birth 🎉
     <th rowspan=5>TinyPng</th>
     <td>✅</td>
     <td>version >= <b>2.3.1</b></td>
-    <td>❌</td>
+    <td>🟡</td>
     <td>Highest version <b>2.3.0</b></td>
   </tr>
   <tr>
@@ -121,15 +126,15 @@ So there is ***`picgo-plugin-compress-next`*** birth 🎉
     </td>
   </tr>
   <tr>
-    <th rowspan=3>imagemin</th>
+    <th rowspan=4>imagemin</th>
     <td>✅</td>
     <td>
-      <b>mozjpeg</b>:<br>
-      Support for local lossy conversion
+      <b>mozjpeg</b> & <b>upng</b>:<br>
+      Can configure compression parameters
     </td>
-    <td>✅</td>
+    <td>🟡</td>
     <td>
-      <b>mozjpeg</b>:<br>
+      <b>mozjpeg</b> & <b>upng</b>:<br>
       Support for local lossy conversion
     </td>
   </tr>
@@ -137,9 +142,9 @@ So there is ***`picgo-plugin-compress-next`*** birth 🎉
     <td>✅</td>
     <td>
       <b>imagemin-webp</b>:<br>
-      Supports local lossy conversion to <b>webp</b>
+      Can configure compression parameters
     </td>
-    <td>✅</td>
+    <td>🟡</td>
     <td>
       <b>imagemin-webp</b>:<br>
       Supports local lossy conversion to <b>webp</b>
@@ -153,6 +158,12 @@ So there is ***`picgo-plugin-compress-next`*** birth 🎉
     </td>
     <td>❌</td>
     <td>Conversion from gif to webp is not supported</td>
+  </tr>
+  <tr>
+    <td>✅</td>
+    <td>Multiple sets of compression configuration parameters are prepared, and you can configure them yourself</td>
+    <td>❌</td>
+    <td>Fixed preset parameters</td>
   </tr>
   <tr>
     <th rowspan=2>webp-converter</th>
@@ -188,6 +199,13 @@ So there is ***`picgo-plugin-compress-next`*** birth 🎉
 - [x] Add ability of `gift 2 webp`
   - [x] Use `webp-converter`'s `gwebp`
   - [x] `imagemin-gif2webp`
+- [x] Can set compression parameters based on your requirements
+  - [x] `imagemin-upng`
+  - [x] `imagemin-mozjpeg`
+  - [x] `imagemin-webp`
+  - [x] `imagemin-gif2webp`
+  - [x] `webp-converter-cwebp`
+  - [x] `webp-converter-gwebp`
 
 
 # Reporting Issues  
