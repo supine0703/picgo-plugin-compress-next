@@ -1,7 +1,7 @@
 import { ToWebP } from 'webp-converter';
 import { join } from 'path';
 import { v4 as uuid } from 'uuid';
-import { existsSync, mkdirSync, writeFileSync, readFileSync, unlinkSync } from 'fs';
+import * as fs from 'fs-extra';
 
 /**
  * Convert buffer to webp buffer
@@ -16,21 +16,22 @@ export async function Buffer2WebPBuffer(
   extname: string,
   toWebP: ToWebP,
   option: string,
+  id?: string,
 ): Promise<Buffer> {
   const extraPath = join(__dirname, '/temp/');
-  if (!existsSync(extraPath)) {
-    mkdirSync(extraPath, { recursive: true });
+  if (!fs.existsSync(extraPath)) {
+    fs.mkdirSync(extraPath, { recursive: true });
   }
 
-  const filename = uuid();
+  const filename = id || uuid();
   const input = `${extraPath}${filename}${extname}`;
   const output = `${extraPath}${filename}.webp`;
 
-  writeFileSync(input, buffer);
+  fs.writeFileSync(input, buffer);
   return toWebP(input, output, option).then(() => {
-    const buf = Buffer.from(readFileSync(output));
-    unlinkSync(input);
-    unlinkSync(output);
+    const buf = Buffer.from(fs.readFileSync(output));
+    fs.unlinkSync(input);
+    fs.unlinkSync(output);
     return buf;
   });
 }

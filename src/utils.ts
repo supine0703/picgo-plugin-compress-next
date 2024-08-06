@@ -3,6 +3,7 @@ import { IPicGo } from 'picgo';
 import { imageSize } from 'image-size';
 import { extname, basename } from 'path';
 import { ImageInfo } from './interface';
+import { ExecException, exec } from 'child_process';
 
 // Check if the URL is a network URL
 export function isNetworkUrl(url: string): boolean {
@@ -39,14 +40,16 @@ export function getImageBuffer(ctx: IPicGo, imageUrl: string): Promise<Buffer> {
 }
 
 // Get image information from image buffer
-export function getImageInfo(imageUrl: string, buffer: Buffer): ImageInfo {
+export function getImageInfo(imageUrl: string, buffer: Buffer, compressRatio?: number): ImageInfo {
   const { width, height } = imageSize(buffer);
+  const ratio = compressRatio || buffer.length / fs.statSync(imageUrl).size;
   return {
     buffer,
     width: width as number,
     height: height as number,
     fileName: basename(imageUrl),
     extname: extname(imageUrl),
+    compressionRatio: `${(ratio * 100).toFixed(1)}%`,
   };
 }
 
@@ -65,4 +68,18 @@ export function logExecutionTime<T>(log: (info: string) => void, what: string, f
   const end = performance.now();
   log(`${what} Time: ${(end - start).toFixed(2)}ms`);
   return result;
+}
+
+export function openFile(
+  file: string,
+  callback?: (error: ExecException | null, stdout: string, stderr: string) => void,
+): void {
+  const command =
+    process.platform === 'win32'
+      ? `start "" "${file}"`
+      : process.platform === 'darwin'
+      ? `open "${file}"`
+      : `xdg-open "${file}"`;
+
+  exec(command, callback);
 }

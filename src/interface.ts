@@ -4,6 +4,7 @@ export interface ImageInfo {
   buffer: Buffer;
   width: number;
   height: number;
+  compressionRatio: string;
 }
 
 export interface CommonParams {

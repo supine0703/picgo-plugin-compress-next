@@ -3,11 +3,11 @@ import { TinyPngCompress } from './compress/tinypngweb';
 import { TinyPngKeyCompress, RefreshTinyPngConfig } from './compress/tinypng';
 import { ImageminCompress, ImageminWebpCompress, ImageminGif2WebPCompress } from './compress/imagemin';
 import { WebPConverterCWebP, WebPConverterGWebP } from './compress/webp-converter';
-import { CompressType, GifCompressType } from './config';
-import { getUrlInfo, logExecutionTime } from './utils';
+import { CompressType, GifCompressType, PROJ_CONF } from './config';
+import { getUrlInfo, logExecutionTime, openFile } from './utils';
 import { IConfig, IConfigKeys } from './interface';
 import { SkipCompress } from './compress/skip';
-import { PROJ_CONF } from './config';
+import { getOptionFilePath, resetOption } from './compress/option';
 
 // Allowed image file extensions
 const ALLOW_EXTNAME = ['.png', '.jpg', '.jpeg', '.webp'];
@@ -21,10 +21,10 @@ const getConfig = (ctx: IPicGo): IConfig => {
 const getConfigData = (ctx: IPicGo) => {
   const config: IConfig = getConfig(ctx);
   return {
-    compress: config[IConfigKeys.A] || CompressType.A,
-    gifCompress: config[IConfigKeys.B] || GifCompressType.A,
-    refresh: config[IConfigKeys.G] || false,
-    tinyKey: config[IConfigKeys.H] || null,
+    compress: config?.[IConfigKeys.A] || CompressType.A,
+    gifCompress: config?.[IConfigKeys.B] || GifCompressType.A,
+    refresh: config?.[IConfigKeys.G] || false,
+    tinyKey: config?.[IConfigKeys.H] || null,
   };
 };
 
@@ -81,6 +81,7 @@ const handle = async (ctx: IPicGo): Promise<IPicGo> => {
   });
 
   return Promise.all(tasks).then((output) => {
+    throw new Error('Test End');
     // Log compressed image information
     ctx.log.info(
       'Compressed image info:',
@@ -90,6 +91,7 @@ const handle = async (ctx: IPicGo): Promise<IPicGo> => {
           extname: item.extname,
           height: item.height,
           width: item.width,
+          'compression ratio': item.compressionRatio,
         })),
       ),
     );
@@ -129,6 +131,26 @@ const CompressTransformers: IPicGoPlugin = (ctx: IPicGo) => {
             await RefreshTinyPngConfig(ctx, true).then((info) => success(ctx, guiApi, info));
           },
         },
+        {
+          label: 'Open Quality Configuration of Compression',
+          async handle(ctx, guiApi) {
+            openFile(await getOptionFilePath(), (error, stdout, stderr) => {
+              if (error) {
+                guiApi.showNotification({
+                  title: 'Error',
+                  body: 'Failed to open quality configuration. Please open log for more information.',
+                });
+                ctx.log.error(error.message);
+              }
+            });
+          },
+        },
+        {
+          label: 'Reset Quality Configuration of Compression',
+          async handle(ctx, guiApi) {
+            resetOption().then(() => success(ctx, guiApi, 'Quality configuration reset successfully.'));
+          },
+        },
       ];
     },
     config(ctx: IPicGo): IPluginConfig[] {
@@ -157,9 +179,7 @@ const CompressTransformers: IPicGoPlugin = (ctx: IPicGo) => {
           type: 'confirm',
           default: refresh,
           required: false,
-          when(answer: any): boolean {
-            return answer.compress === CompressType.A;
-          },
+          when: (answer: any): boolean => answer.compress === CompressType.A,
         },
         {
           name: IConfigKeys.H,
@@ -167,9 +187,7 @@ const CompressTransformers: IPicGoPlugin = (ctx: IPicGo) => {
           message: 'Enter API key(s). This is required if tinypng. Separate multiple keys with commas.',
           default: tinyKey,
           required: false,
-          when(answer: any): boolean {
-            return answer.compress === CompressType.A;
-          },
+          when: (answer: any): boolean => answer.compress === CompressType.A,
         },
       ];
     },
