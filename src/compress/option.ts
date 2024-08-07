@@ -86,15 +86,14 @@ const defaultOption = {
     'webp-converter-gwebp': {
       url: 'https://developers.google.com/speed/webp/docs/gif2webp',
       option: '-q 80 -m 6 -lossy -min_size',
-      recommend: [
-        '-q 70 -m 6 -lossy',
-        '-q 60 -m 6 -lossy'
-      ],
+      recommend: ['-q 70 -m 6 -lossy', '-q 60 -m 6 -lossy'],
     },
   },
 };
 
 const filePath = join(__dirname, 'option.json');
+
+export type OptionModule = keyof typeof defaultOption.module;
 
 export async function resetOption(): Promise<void> {
   await fs.writeJSON(filePath, defaultOption);
@@ -109,7 +108,7 @@ export async function getOptionFilePath(): Promise<string> {
   });
 }
 
-export async function getOption(module: keyof typeof defaultOption.module): Promise<{} | string> {
+export async function getOption(module: OptionModule): Promise<{} | string> {
   if (await fs.pathExists(filePath)) {
     const option: Option = await fs.readJSON(filePath);
     if (option?.reset === 'not' && option?.module?.[module]?.option) {
