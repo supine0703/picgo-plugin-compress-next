@@ -81,7 +81,6 @@ const handle = async (ctx: IPicGo): Promise<IPicGo> => {
   });
 
   return Promise.all(tasks).then((output) => {
-    throw new Error('Test End');
     // Log compressed image information
     ctx.log.info(
       'Compressed image info:',
