@@ -2,6 +2,11 @@
 [中文](./README.md) |-> [English](./README.en.md)
 
 
+### picgo-plugin-compress-next
+
+[![dm](https://img.shields.io/npm/dm/picgo-plugin-compress-next?color=brightgreen)](https://npmcharts.com/compare/picgo-plugin-compress-next?minimal=true) [![v](https://img.shields.io/npm/v/picgo-plugin-compress-next?color=brightgreen)](https://www.npmjs.com/package/picgo-plugin-compress-next) [![mit](https://img.shields.io/badge/license-mit-brightgreen.svg)](https://github.com/supine0703/picgo-plugin-compress-next/blob/master/LICENSE)
+
+
 ### 🍴 Fork
 
 This is a fork of the  [picgo-plugin-compress-webp-lossless](https://github.com/mrgeneralgoo/picgo-plugin-compress-webp-lossless) repository, And it is a fork of the [picgo-plugin-compress](https://github.com/JuZiSang/picgo-plugin-compress) repository.
