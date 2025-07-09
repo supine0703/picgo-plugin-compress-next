@@ -178,7 +178,7 @@ const CompressTransformers: IPicGoPlugin = (ctx: IPicGo) => {
           type: 'confirm',
           default: refresh,
           required: false,
-          when: (answer: any): boolean => answer.compress === CompressType.A,
+          when: (answer: any): boolean => answer[IConfigKeys.A] === CompressType.A,
         },
         {
           name: IConfigKeys.H,
@@ -186,7 +186,7 @@ const CompressTransformers: IPicGoPlugin = (ctx: IPicGo) => {
           message: 'Enter API key(s). This is required if tinypng. Separate multiple keys with commas.',
           default: tinyKey,
           required: false,
-          when: (answer: any): boolean => answer.compress === CompressType.A,
+          when: (answer: any): boolean => answer[IConfigKeys.A] === CompressType.A,
         },
       ];
     },
